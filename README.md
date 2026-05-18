@@ -1,2 +1,2 @@
-# webserv
-42 webserv
+# ft_irc
+IRC
