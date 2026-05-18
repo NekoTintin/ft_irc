@@ -45,9 +45,15 @@ bool	Server::socketSetup() {
 		return (false);
 	}
 
-
+	// Set socket not blocking
+	if (fcntl(this->_socketFD, F_SETFL, O_NONBLOCK) < 0) {
+		std::cerr << "Error: Failed to set socket to non-blocking mode." << std::endl;
+		close(this->_socketFD);
+		return (false);
+	}
 
 	// Struct setup + listen all interfaces
+	std::memset(&this->_serverAddr, 0, sizeof(this->_serverAddr));
 	this->_serverAddr.sin_family = AF_INET;
 	this->_serverAddr.sin_port = htons(this->_port);
 	this->_serverAddr.sin_addr.s_addr = INADDR_ANY;
