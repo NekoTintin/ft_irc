@@ -1,3 +1,5 @@
+_This project has been created as part of the 42 curriculum by qupollet, mlelu, tmalkawi._
+
 # ft_irc
 IRC
 
@@ -18,15 +20,15 @@ IRC
 
 2. Ajouter le socket serveur dans _pollfds ------> OK
 
-3. Lancer la boucle infinie 
+3. Lancer la boucle infinie -------------> OK
 
-4. À chaque tour :
+4. À chaque tour : ------------------> OK
    poll(_pollfds)
 
-5. Si activité sur le socket serveur :
+5. Si activité sur le socket serveur : ----------------> OK
    accepter une nouvelle connexion avec accept()
 
-6. Pour ce nouveau client :
+6. Pour ce nouveau client : ---------------------------> OK
    - créer/stocker un Client
    - ajouter son fd dans _pollfds
 
