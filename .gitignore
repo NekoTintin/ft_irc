@@ -43,5 +43,5 @@
 # Vscode
 .vscode/
 
-# doc
+#doc
 *.pdf
