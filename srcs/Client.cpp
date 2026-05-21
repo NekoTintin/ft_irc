@@ -11,3 +11,8 @@ Client::Client(int new_socket){
 int Client::getFd() const{
     return (this->_fd);
 }
+
+void Client::addToBuffer(const std::string &data)
+{
+    this->_buffer += data;
+}

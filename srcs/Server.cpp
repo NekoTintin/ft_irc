@@ -131,6 +131,31 @@ void	Server::acceptNewClient()
 	std::cout << "New client connected: fd " << clientFD << std::endl;
 }
 
+void	Server::receiveFromClient(int fd)
+{
+	char	buffer[1024];
+	int		bytesRecv = recv(fd, buffer, sizeof(buffer) - 1, 0);
+
+	if (bytesRecv < 0)
+	{
+		std::cerr << "Error with message from client" << std::endl;
+		removeClient(fd);
+		return;
+	}
+	else if (bytesRecv == 0)
+	{
+		std::cout << "Connection closed" << std::endl;
+		removeClient(fd);
+		return;
+	}
+		buffer[bytesRecv] = '\0';
+
+		std::string data(buffer);
+		_clients[fd].addToBuffer(data);
+
+		std::cout << "Received : " << data <<std::endl;
+}
+
 void	Server::runServerLoop()
 {
 	while (1)
@@ -168,13 +193,13 @@ void	Server::runServerLoop()
 
 			if (fd == _socketFD && (_pollfds[i].revents & POLLIN)) // Socket serveur et connexion entrante
 			{
-				acceptnewClient();
+				acceptNewClient();
 				continue;
 			}
 
 			if (fd != _socketFD && (_pollfds[i].revents & POLLIN))
 			{
-				//receiveFromClient(fd);
+				receiveFromClient(fd);
 				continue;
 			}
 		}

@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include <poll.h>
+#include <cstdlib>
 
 #include "Client.hpp"
 
@@ -28,6 +29,7 @@ class Server {
 		void	runServerLoop();
 		void	removeClient(int fd);
 		void	acceptNewClient();
+		void	receiveFromClient(int fd);
 
 	private:
 		int						_port;

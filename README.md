@@ -14,6 +14,10 @@ IRC
 - Sockets:
     https://youtu.be/gntyAFoZp-E?si=g4ap0MMGicZ-UDn7
 
+- Recve():
+   https://pubs.opengroup.org/onlinepubs/007904975/functions/recv.html
+   https://www.ibm.com/docs/en/zos/2.5.0?topic=functions-recv-receive-data-socket
+
 
 1. Initialiser le serveur ----> OK
    socket → bind → listen

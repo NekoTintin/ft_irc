@@ -11,6 +11,7 @@ class Client {
 		~Client();
 
     int getFd() const;
+    void addToBuffer(const std::string &data);
   
     private:
         int         _fd;
