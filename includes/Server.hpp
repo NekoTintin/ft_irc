@@ -9,6 +9,11 @@
 #include <unistd.h>
 #include <cstring>
 #include <fcntl.h>
+#include <vector>
+#include <map>
+#include <poll.h>
+
+#include "Client.hpp"
 
 class Server {
 	public:
@@ -19,11 +24,19 @@ class Server {
 		// Funcs
 		bool	checkParsing(int argc, char **argv);
 		bool	socketSetup();
+
 	private:
-		int	_port;
+		int						_port;
 		std::string 			_password;
 		int						_socketFD;
 		struct sockaddr_in		_serverAddr;
+
+		// Liste des fds surveilles par poll()
+		std::vector<pollfd>		_pollfds;
+		// Infos de chaque client, accessibles par son fd.
+		// Clients[5] contient le Client associe au fd=5.
+		std::map<int, Client>	 				
+		
 };
 
 # endif

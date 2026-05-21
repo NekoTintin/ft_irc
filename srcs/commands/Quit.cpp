@@ -1,0 +1,3 @@
+/*  Deconnexion propre
+    QUIT :bye
+*/
