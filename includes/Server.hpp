@@ -24,6 +24,10 @@ class Server {
 		// Funcs
 		bool	checkParsing(int argc, char **argv);
 		bool	socketSetup();
+		void	addServertoPoll(); //ajoute le server a pollfds
+		void	runServerLoop();
+		void	removeClient(int fd);
+		void	acceptNewClient();
 
 	private:
 		int						_port;
@@ -33,9 +37,10 @@ class Server {
 
 		// Liste des fds surveilles par poll()
 		std::vector<pollfd>		_pollfds;
+
 		// Infos de chaque client, accessibles par son fd.
 		// Clients[5] contient le Client associe au fd=5.
-		std::map<int, Client>	 				
+		std::map<int, Client>	_clients;				
 		
 };
 

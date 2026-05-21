@@ -75,3 +75,109 @@ bool	Server::socketSetup() {
 	std::cout << "Server is currently listening on port '" << this->_port << "'..." << std::endl;
 	return (true);
 }
+
+//Connect the server Socket to the poll() event checker
+void	Server::addServertoPoll()
+{
+	pollfd	server_fd;
+	server_fd.fd = _socketFD;
+	server_fd.events = POLLIN;
+	_pollfds.push_back(server_fd);
+}
+
+void	Server::removeClient(int fd)
+{
+	close(fd);
+	for (std::vector<pollfd>::iterator it = _pollfds.begin(); it != _pollfds.end(); ++it)
+	{
+		if (it->fd == fd)
+		{
+			_pollfds.erase(it);
+			break;
+		}
+	}
+
+	_clients.erase(fd);
+}
+
+void	Server::acceptNewClient()
+{
+	struct sockaddr_in	_clientaddr;
+	socklen_t			addr_size = sizeof(_clientaddr);
+
+	int clientFD = accept(_socketFD, (struct sockaddr*)&_clientaddr, &addr_size);
+
+	if (clientFD < 0)
+	{
+		std::cerr << "New client - Accept error" << std::endl;
+		return;
+	}
+
+	if (fcntl(clientFD, F_SETFL, O_NONBLOCK) < 0)
+	{
+		std::cerr << "New client - fcntl error" << std::endl;
+		close(clientFD);
+		return;
+	}
+
+	Client	newClient(clientFD);
+	_clients[clientFD] = newClient;
+
+	pollfd	newClientFD;
+	newClientFD.fd = newClient.getFd();
+	newClientFD.events = POLLIN;
+	newClientFD.revents = 0;
+	_pollfds.push_back(newClientFD);
+	std::cout << "New client connected: fd " << clientFD << std::endl;
+}
+
+void	Server::runServerLoop()
+{
+	while (1)
+	{
+		
+		int ready = poll(_pollfds.data(), _pollfds.size(), -1);
+
+		if (ready < 0)
+		{
+			std::cerr << "Poll Error" << std::endl;
+			break;
+		}
+
+		if (ready == 0)
+		{
+			std::cerr << "Time out" << std::endl;
+			break;
+		}
+
+
+		for (size_t i = 0; i < _pollfds.size(); i++)
+		{
+    		int fd = _pollfds[i].fd;
+
+		    if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))
+    		{
+				if (fd != _socketFD)
+				{
+					removeClient(fd);
+					if (i > 0)
+						i--;
+				}
+				continue;
+    		}
+
+			if (fd == _socketFD && (_pollfds[i].revents & POLLIN)) // Socket serveur et connexion entrante
+			{
+				acceptnewClient();
+				continue;
+			}
+
+			if (fd != _socketFD && (_pollfds[i].revents & POLLIN))
+			{
+				//receiveFromClient(fd);
+				continue;
+			}
+		}
+
+	}
+}
