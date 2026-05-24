@@ -16,6 +16,7 @@
 #include <csignal>
 
 #include "Client.hpp"
+#include "Command.hpp"
 
 extern bool g_running;
 

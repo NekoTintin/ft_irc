@@ -7,10 +7,12 @@ INCLUDE_DIR = includes/
 SRCS = 	\
 		srcs/main.cpp \
 		srcs/Client.cpp \
-		srcs/Server.cpp 
+		srcs/Server.cpp \
+		srcs/Command.cpp
 
 HEADER_LIST =	\
 				Client.hpp \
+				Command.hpp \
 				Server.hpp
 
 HEADERS = ${HEADER_LIST:%=${INCLUDE_DIR}/%}

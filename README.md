@@ -1,4 +1,4 @@
-_This project has been created as part of the 42 curriculum by qupollet, mlelu, tmalkawi._
+_This project has been created as part of the 42 curriculum by mlelu, qupollet, tmalkawi._
 
 # ft_irc
 IRC
@@ -72,19 +72,15 @@ Details :
    pour l’instant juste l’afficher proprement.
    Tester les messages fragmentés ----------> ok
    Avec nc -C.
-
-Tester le cas du sujet :
-
-com^Dman^Dd
-Objectif : reconstruire correctement une commande reçue en plusieurs morceaux.
+   Tester le cas du sujet :
+   com^Dman^Dd
+   Objectif : reconstruire correctement une commande reçue en plusieurs morceaux.
 
 5.Préparer l’interface avec le membre B
-
-Ta partie doit pouvoir fournir :
-
-fd client + ligne IRC complète
-Son parser/command handler traitera ensuite :
-PASS, NICK, USER, JOIN, etc.
+   Ta partie doit pouvoir fournir :
+   fd client + ligne IRC complète
+   Son parser/command handler traitera ensuite :
+   PASS, NICK, USER, JOIN, etc.
 
 6.Ajouter une file d’envoi plus tard
    Ne pas forcément faire send() directement partout.
@@ -117,3 +113,172 @@ permissions
 MODE
 PRIVMSG
 architecture objet
+
+Partie B :
+
+1.Créer le CommandParser------------> ok
+Le parser reçoit une ligne IRC complète :
+"NICK malu"
+Il doit identifier :
+la commande,
+les arguments.
+Première étape :
+découper correctement la ligne
+-> Objectif :
+avoir une architecture propre pour traiter les commandes IRC.
+
+2.Découper les commandes IRC-------------->ok
+
+Séparer :
+commande = NICK 
+args = malu
+Comprendre les cas IRC :
+PRIVMSG #42 :hello world
+Le : signifie :
+le reste est un seul argument
+-> Objectif :
+parser correctement les lignes IRC réelles.
+
+3.Créer le système de dispatch
+Le parser détecte :------------------>ok
+PASS
+NICK
+USER
+JOIN
+
+Puis appelle : ////// CREER LE BON HANDLER
+handlePass()
+handleNick()
+handleJoin()
+-> Objectif :
+éviter un énorme if/else illisible.
+
+4.Ajouter l’état IRC dans Client
+Ajouter :
+nickname
+username
+authenticated
+registered
+Le Client devient un vrai utilisateur IRC.
+-> Objectif :
+stocker l’identité et l’état IRC du client.
+
+5.Implémenter PASS
+Vérifier :
+mot de passe correct,
+PASS envoyé avant registration.
+Refuser si incorrect.
+-> Objectif :
+sécuriser l’accès au serveur.
+
+6.Implémenter NICK
+Vérifier :
+nickname valide,
+nickname unique.
+Stocker dans Client.
+-> Objectif :
+donner une identité IRC au client.
+
+7.Implémenter USER
+Stocker :
+username
+realname
+Vérifier syntaxe minimale.
+-> Objectif :
+compléter l’identité IRC.
+
+8.Gérer la registration IRC
+Quand :
+PASS ok
+NICK ok
+USER ok
+
+Le client devient :
+registered
+Le serveur envoie :
+001 Welcome
+-> Objectif :
+permettre au client d’utiliser IRC.
+
+9.Créer sendToClient()
+
+Wrapper autour de :
+send()
+Envoyer proprement :
+réponses,
+erreurs,
+messages IRC.
+-> Objectif :
+centraliser tous les envois réseau.
+
+10.Créer la classe Channel
+Un channel contient :
+nom
+membres
+operators
+topic
+modes
+-> Objectif :
+représenter les salons IRC.
+
+11.Implémenter JOIN
+Créer le channel si nécessaire.
+Ajouter le client.
+Broadcast le JOIN.
+-> Objectif :
+permettre aux users d’entrer dans des channels.
+
+12.Implémenter PRIVMSG
+Envoyer :
+user → user,
+user → channel.
+Le serveur redistribue les messages.
+-> Objectif :
+faire fonctionner le chat IRC.
+
+13.Implémenter le broadcast
+Envoyer un message à :
+tous les membres du channel,
+sauf éventuellement l’émetteur.
+-> Objectif :
+distribuer les messages IRC.
+
+14.Implémenter QUIT
+Broadcast du départ.
+Retirer le client :
+des channels,
+du serveur.
+removeClient(fd).
+-> Objectif :
+gérer les déconnexions IRC proprement.
+
+15.Implémenter PING / PONG
+Le serveur envoie :
+PING
+Le client répond :
+PONG
+Sinon timeout.
+-> Objectif :
+vérifier qu’un client est toujours vivant.
+
+16.Gérer les erreurs IRC
+Nickname déjà utilisé.
+Pas enregistré.
+Channel inexistant.
+Etc.
+Envoyer les bons numeric replies IRC.
+-> Objectif :
+respecter le protocole IRC.
+
+17.Tester avec un vrai client IRC
+irssi
+HexChat
+WeeChat
+Tester :
+connexion,
+JOIN,
+messages,
+QUIT,
+erreurs.
+-> Objectif :
+vérifier que le serveur respecte le protocole IRC réel.

@@ -169,7 +169,8 @@ void	Server::receiveFromClient(int fd)
 		{
 			std::string complete_command = _clients[fd].getCommand();
 			_clients[fd].removeCommand();
-			// send the complete_command to future parser
+			Command	_newCommand;
+			_newCommand.processLine(complete_command);
 			std::cout << "Complete command [" << complete_command << "]" << std::endl;
 		}
 		std::cout << "Received : " << data <<std::endl;
