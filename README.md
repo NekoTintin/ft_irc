@@ -35,13 +35,13 @@ Membre B → IRC logique métier
 
 Details :
 
-1.Sécuriser l’arrêt du serveur
-   Remplacer while (1) par while (_running).
+1.Sécuriser l’arrêt du serveur ----> ok
+   Remplacer while (1) par while (_running). 
    Gérer SIGINT.
    Fermer proprement tous les fd.
    Objectif : plus d’arrêt brutal sous Valgrind.
 
-2.Finaliser removeClient(fd)
+2.Finaliser removeClient(fd) ----> ok
    close(fd)
    supprimer le fd de _pollfds
    supprimer le client de _clients
