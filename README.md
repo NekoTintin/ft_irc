@@ -9,14 +9,20 @@ IRC
     https://bousk.developpez.com/cours/reseau-c++/TCP/05-envoi-reception-serveur/
     https://www.ibm.com/docs/fr/i/7.5.0?topic=designs-using-poll-instead-select
     
-
-
 - Sockets:
     https://youtu.be/gntyAFoZp-E?si=g4ap0MMGicZ-UDn7
 
 - Recve():
    https://pubs.opengroup.org/onlinepubs/007904975/functions/recv.html
    https://www.ibm.com/docs/en/zos/2.5.0?topic=functions-recv-receive-data-socket
+
+- Signal :
+   https://www.geeksforgeeks.org/cpp/signal-handling-in-cpp/
+
+- Project overview :
+   https://nathaan.me/projects/irc
+   https://modern.ircdocs.horse/
+   https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=connexion
 
 
 Membre A → Réseau / serveur bas niveau
@@ -47,24 +53,24 @@ Details :
    supprimer le client de _clients
    tester les déconnexions avec plusieurs nc.
 
-3.Améliorer receiveFromClient(fd)
+3.Améliorer receiveFromClient(fd) -----> ok
    recv()
    si recv == 0 → déconnexion
    si recv > 0 → ajouter au buffer du Client
    ne plus seulement afficher le message.
 
 4.Gérer les buffers TCP
-   Chaque client doit avoir son propre std::string _buffer.
-   Accumuler les morceaux reçus.
-   Chercher \r\n.
-   Extraire une commande complète.
-   Garder le reste du buffer s’il y a une commande incomplète.
-   Créer une fonction de traitement des lignes
+   Chaque client doit avoir son propre std::string _buffer. ---> ok
+   Accumuler les morceaux reçus. -----> ok
+   Chercher \r\n. ------> ok
+   Extraire une commande complète. -----> ok
+   Garder le reste du buffer s’il y a une commande incomplète. -----> ok
+   Créer une fonction de traitement des lignes ---------> ok
    Quand une ligne complète est trouvée :
-   l’extraire du buffer,
-   l’envoyer au futur parser,
+   l’extraire du buffer, ----------------> ok
+   l’envoyer au futur parser, TO DONE -> NO PARSER YET
    pour l’instant juste l’afficher proprement.
-   Tester les messages fragmentés
+   Tester les messages fragmentés ----------> ok
    Avec nc -C.
 
 Tester le cas du sujet :

@@ -96,17 +96,21 @@ void	Server::addServertoPoll()
 
 void	Server::removeClient(int fd)
 {
-	close(fd);
-	for (std::vector<pollfd>::iterator it = _pollfds.begin(); it != _pollfds.end(); ++it)
+	if (fd != _socketFD)
 	{
-		if (it->fd == fd)
+		close(fd);
+		for (std::vector<pollfd>::iterator it = _pollfds.begin(); it != _pollfds.end(); ++it)
 		{
-			_pollfds.erase(it);
-			break;
+			if (it->fd == fd)
+			{
+				_pollfds.erase(it);
+				break;
+			}
 		}
+	
+		_clients.erase(fd);
+		std::cout << "Client disconnected: fd " << fd << std::endl;
 	}
-
-	_clients.erase(fd);
 }
 
 void	Server::acceptNewClient()
@@ -161,7 +165,13 @@ void	Server::receiveFromClient(int fd)
 
 		std::string data(buffer);
 		_clients[fd].addToBuffer(data);
-
+		while (_clients[fd].isComplete())
+		{
+			std::string complete_command = _clients[fd].getCommand();
+			_clients[fd].removeCommand();
+			// send the complete_command to future parser
+			std::cout << "Complete command [" << complete_command << "]" << std::endl;
+		}
 		std::cout << "Received : " << data <<std::endl;
 }
 

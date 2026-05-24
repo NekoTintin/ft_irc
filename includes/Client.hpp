@@ -12,6 +12,9 @@ class Client {
 
     int getFd() const;
     void addToBuffer(const std::string &data);
+    bool isComplete();
+    std::string getCommand();
+    void removeCommand();
   
     private:
         int         _fd;
