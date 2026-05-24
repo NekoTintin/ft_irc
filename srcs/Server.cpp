@@ -1,5 +1,7 @@
 #include "Server.hpp"
 
+bool g_running = true;
+
 Server::Server(): _port(-1), _password("never") {
 	// Never used
 }
@@ -44,6 +46,13 @@ bool	Server::socketSetup() {
 		std::cerr << "Error: Failed to create socket." << std::endl;
 		return (false);
 	}
+
+	int opt = 1;
+	if (setsockopt(_socketFD, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+	std::cerr << "Error: setsockopt failed." << std::endl;
+	close(_socketFD);
+	return (false);
+}
 
 	// Set socket not blocking
 	if (fcntl(this->_socketFD, F_SETFL, O_NONBLOCK) < 0) {
@@ -156,15 +165,35 @@ void	Server::receiveFromClient(int fd)
 		std::cout << "Received : " << data <<std::endl;
 }
 
+void	Server::signalHandler(int sig)
+{
+	(void) sig;
+
+	g_running = false;
+}
+
+void	Server::cleanServer()
+{
+	for (size_t i = 0; i < _pollfds.size(); i++)
+		close(_pollfds[i].fd);
+
+	_pollfds.clear();
+	_clients.clear();
+}
+
 void	Server::runServerLoop()
 {
-	while (1)
+	signal(SIGINT, signalHandler);
+
+	while (g_running)
 	{
 		
 		int ready = poll(_pollfds.data(), _pollfds.size(), -1);
 
 		if (ready < 0)
 		{
+			if (!g_running)
+				break;
 			std::cerr << "Poll Error" << std::endl;
 			break;
 		}
@@ -174,7 +203,6 @@ void	Server::runServerLoop()
 			std::cerr << "Time out" << std::endl;
 			break;
 		}
-
 
 		for (size_t i = 0; i < _pollfds.size(); i++)
 		{
@@ -205,4 +233,6 @@ void	Server::runServerLoop()
 		}
 
 	}
+
+	cleanServer();
 }

@@ -13,8 +13,11 @@
 #include <map>
 #include <poll.h>
 #include <cstdlib>
+#include <csignal>
 
 #include "Client.hpp"
+
+extern bool g_running;
 
 class Server {
 	public:
@@ -30,6 +33,10 @@ class Server {
 		void	removeClient(int fd);
 		void	acceptNewClient();
 		void	receiveFromClient(int fd);
+		void	cleanServer();
+
+		static void	signalHandler(int sig);
+
 
 	private:
 		int						_port;
@@ -45,5 +52,7 @@ class Server {
 		std::map<int, Client>	_clients;				
 		
 };
+
+
 
 # endif

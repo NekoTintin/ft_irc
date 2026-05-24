@@ -16,3 +16,10 @@ int	main(int argc, char **argv) {
 
 	return (0);
 }
+
+/* Pour tester :
+
+Terminal 1 : valgrind --track-fds=yes ./ircserv 6667 pass
+Autres Terminal : nc 127.0.0.1 6667
+
+*/
