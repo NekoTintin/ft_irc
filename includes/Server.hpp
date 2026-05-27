@@ -14,6 +14,7 @@
 #include <poll.h>
 #include <cstdlib>
 #include <csignal>
+#include <iterator>
 
 #include "Client.hpp"
 #include "Command.hpp"
@@ -36,7 +37,8 @@ class Server {
 		void		receiveFromClient(int fd);
 		void		cleanServer();
 		std::string	getPassword();
-
+		bool		NicknameExists(std::string nickname);
+		
 		static void	signalHandler(int sig);
 
 

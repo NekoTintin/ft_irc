@@ -4,6 +4,7 @@ Client::Client()
 {
     this->_registration = false;
     this->_correctPassword = false;
+    this->_nicknameset = false;
 };
 
 Client::~Client() {};
@@ -12,6 +13,7 @@ Client::Client(int new_socket){
     this->_fd = new_socket;
     this->_registration = false;
     this->_correctPassword = false;
+    this->_nicknameset = false;
 }
 
 int Client::getFd() const{
@@ -60,4 +62,20 @@ bool Client::getRegistration()
 void Client::setRegistration()
 {
     _registration = true;
-} 
+}
+
+void Client::setNickname(std::string nickame)
+{
+    _nickname = nickame;
+    _nicknameset = true;
+}
+
+bool Client::getNicknamestatus()
+{
+    return (_nicknameset);
+}
+
+std::string Client::getNickname()
+{
+    return (_nickname);
+}

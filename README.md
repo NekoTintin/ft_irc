@@ -1,7 +1,24 @@
 _This project has been created as part of the 42 curriculum by mlelu, qupollet, tmalkawi._
 
 # ft_irc
-IRC
+
+Recreate a IRC Internet Relay Chat, a text based chat protocol.
+
+Server : 
+   - receives the connexion requests from several clients
+
+Clients : 
+   - each client is a user with a nickname
+   - all the clients are stored in a Map which as an attribute of the Server
+
+How to start :
+   - Make
+   - Open a terminal and ./ircserv 6667 pass
+   - Arg 1 = port
+   - Arg 2 = password of the server
+
+Need to be careful about open FDs and make sure that they are all properly closed
+
 
 # Sources
 
@@ -172,18 +189,26 @@ Le Client devient un vrai utilisateur IRC.
 -> Objectif :
 stocker l’identité et l’état IRC du client.
 
-5.Implémenter PASS
+UNE LIGNE PAR COMMANDE -> si plusieurs commandes dans une ligne, il s'agit d'une erreur
+Il faut systematiquement verifier le nombre d'arguments pour la commande
+
+5.Implémenter PASS--------> OK
 Vérifier :
-mot de passe correct,
+- mot de passe correct -> verifier avec le mot de passe du serveur (_password) -> OK
+- nombre d'arguments -> 1 arguments max sinon erreur -> OK
+- client deja enregistre ou non ? -> OK
 PASS envoyé avant registration.
 Refuser si incorrect.
 -> Objectif :
 sécuriser l’accès au serveur.
 
-6.Implémenter NICK
+6.Implémenter NICK-----------------------> OK
 Vérifier :
-nickname valide,
+nickname valide:
+- ne peut pas commencer par un chiffre
+- alphanum ok + ces caracteres : _ - [ ] \ ` ^ { }
 nickname unique.
+- parcourir _clients dans server et verifier que le nickname n'est pas deja pris
 Stocker dans Client.
 -> Objectif :
 donner une identité IRC au client.

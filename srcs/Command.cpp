@@ -75,11 +75,13 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
         case 2: handleJoin(); break;
         case 3: handleKick(); break;
         case 4: handleMode(); break;
-        case 5: handleNick(); break;
+        case 5: 
+            if (handleNick(Token, server, client) == true) break;
+            return (false);
+            
         case 6: handlePart(); break;
         case 7: 
-            if (handlePass(Token, server, client) == true)
-                break;
+            if (handlePass(Token, server, client) == true) break;
             return (false);
         case 8: handlePing(); break;
         case 9: handlePong(); break;
