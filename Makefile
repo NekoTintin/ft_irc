@@ -8,12 +8,36 @@ SRCS = 	\
 		srcs/main.cpp \
 		srcs/Client.cpp \
 		srcs/Server.cpp \
-		srcs/Command.cpp
+		srcs/Command.cpp \
+		srcs/commands/Invite.cpp \
+		srcs/commands/Join.cpp \
+		srcs/commands/Kick.cpp \
+		srcs/commands/Mode.cpp \
+		srcs/commands/Nick.cpp \
+		srcs/commands/Part.cpp \
+		srcs/commands/Pass.cpp \
+		srcs/commands/PingPong.cpp \
+		srcs/commands/Privmsg.cpp \
+		srcs/commands/Quit.cpp \
+		srcs/commands/Topic.cpp \
+		srcs/commands/User.cpp 
 
 HEADER_LIST =	\
 				Client.hpp \
 				Command.hpp \
-				Server.hpp
+				Server.hpp \
+				commands/Invite.hpp \
+				commands/Join.hpp \
+				commands/Kick.hpp \
+				commands/Mode.hpp \
+				commands/Nick.hpp \
+				commands/Part.hpp \
+				commands/Pass.hpp \
+				commands/PingPong.hpp \
+				commands/Privmsg.hpp \
+				commands/Quit.hpp \
+				commands/Topic.hpp \
+				commands/User.hpp \
 
 HEADERS = ${HEADER_LIST:%=${INCLUDE_DIR}/%}
 

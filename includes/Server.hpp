@@ -27,14 +27,15 @@ class Server {
 		Server(int port, const std::string &password);
 		~Server();
 		// Funcs
-		bool	checkParsing(int argc, char **argv);
-		bool	socketSetup();
-		void	addServertoPoll(); //ajoute le server a pollfds
-		void	runServerLoop();
-		void	removeClient(int fd);
-		void	acceptNewClient();
-		void	receiveFromClient(int fd);
-		void	cleanServer();
+		bool		checkParsing(int argc, char **argv);
+		bool		socketSetup();
+		void		addServertoPoll(); //ajoute le server a pollfds
+		void		runServerLoop();
+		void		removeClient(int fd);
+		void		acceptNewClient();
+		void		receiveFromClient(int fd);
+		void		cleanServer();
+		std::string	getPassword();
 
 		static void	signalHandler(int sig);
 

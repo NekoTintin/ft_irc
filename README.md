@@ -24,6 +24,13 @@ IRC
    https://modern.ircdocs.horse/
    https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=connexion
 
+- IRC Commands :
+   https://fr.wikipedia.org/wiki/Aide:IRC/commandes
+
+
+----------------------------------------------------------------------------
+
+GRANDES LIGNES DU PROJET :
 
 Membre A → Réseau / serveur bas niveau
 
@@ -147,9 +154,11 @@ USER
 JOIN
 
 Puis appelle : ////// CREER LE BON HANDLER
-handlePass()
-handleNick()
-handleJoin()
+rester avec un enum
+
+handlePass() -> parametre un mot de passe 
+handleNick() -> definir le pseudo
+handleJoin() -> rejoindre un salon
 -> Objectif :
 éviter un énorme if/else illisible.
 

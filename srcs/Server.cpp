@@ -170,7 +170,7 @@ void	Server::receiveFromClient(int fd)
 			std::string complete_command = _clients[fd].getCommand();
 			_clients[fd].removeCommand();
 			Command	_newCommand;
-			_newCommand.processLine(complete_command);
+			_newCommand.processLine(complete_command, *this, _clients[fd]);
 			std::cout << "Complete command [" << complete_command << "]" << std::endl;
 		}
 		std::cout << "Received : " << data <<std::endl;
@@ -246,4 +246,9 @@ void	Server::runServerLoop()
 	}
 
 	cleanServer();
+}
+
+std::string	Server::getPassword()
+{
+	return (_password);
 }

@@ -10,3 +10,11 @@ l : set/remove limite utilisateurs
     MODE #42 +l 10
     MODE #42 -i
 */
+
+#include "commands/Mode.hpp"
+
+bool handleMode()
+{
+    std::cout << "HANDLE MODE" << std::endl;
+    return (true);
+}

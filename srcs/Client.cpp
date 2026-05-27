@@ -1,11 +1,17 @@
 #include "Client.hpp"
 
-Client::Client() {};
+Client::Client()
+{
+    this->_registration = false;
+    this->_correctPassword = false;
+};
 
 Client::~Client() {};
 
 Client::Client(int new_socket){
     this->_fd = new_socket;
+    this->_registration = false;
+    this->_correctPassword = false;
 }
 
 int Client::getFd() const{
@@ -35,3 +41,23 @@ void Client::removeCommand()
     std::size_t found = _buffer.find("\r\n");
     _buffer.erase(0, found + 2);
 }
+
+bool Client::getCorrectPassword()
+{
+    return (_correctPassword);
+}
+
+void Client::setCorrectPassword()
+{
+    _correctPassword = true;
+}
+
+bool Client::getRegistration()
+{
+    return (_registration);
+}
+
+void Client::setRegistration()
+{
+    _registration = true;
+} 
