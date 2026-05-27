@@ -9,6 +9,7 @@ SRCS = 	\
 		srcs/Client.cpp \
 		srcs/Server.cpp \
 		srcs/Command.cpp \
+		srcs/Utils.cpp \
 		srcs/commands/Invite.cpp \
 		srcs/commands/Join.cpp \
 		srcs/commands/Kick.cpp \
@@ -26,6 +27,7 @@ HEADER_LIST =	\
 				Client.hpp \
 				Command.hpp \
 				Server.hpp \
+				Utils.hpp \
 				commands/Invite.hpp \
 				commands/Join.hpp \
 				commands/Kick.hpp \
@@ -37,7 +39,7 @@ HEADER_LIST =	\
 				commands/Privmsg.hpp \
 				commands/Quit.hpp \
 				commands/Topic.hpp \
-				commands/User.hpp \
+				commands/User.hpp 
 
 HEADERS = ${HEADER_LIST:%=${INCLUDE_DIR}/%}
 

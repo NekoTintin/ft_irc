@@ -9,8 +9,6 @@
 class Server;
 class Client;
 
-bool nonalphanumchar(char c);
-bool correctNickname(std::string nicknametocheck);
 bool handleNick(std::vector<std::string> &token, Server &server,
         Client &client);
 #endif

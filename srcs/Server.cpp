@@ -144,6 +144,19 @@ void	Server::acceptNewClient()
 	std::cout << "New client connected: fd " << clientFD << std::endl;
 }
 
+bool	Server::tryRegisration(Client client)
+{
+	if (client.getNicknamestatus() == true && client.getCorrectPassword() == true
+				&& client.getUsernamestatus() == true && client.getRealnamestatus() == true
+				&& client.getRegistration() == false)
+		{
+			client.setRegistration();
+			std::cout << "Client registered" << std::endl;
+			return (true);
+		}
+	return (false);
+}
+
 void	Server::receiveFromClient(int fd)
 {
 	char	buffer[1024];
@@ -171,9 +184,9 @@ void	Server::receiveFromClient(int fd)
 			_clients[fd].removeCommand();
 			Command	_newCommand;
 			_newCommand.processLine(complete_command, *this, _clients[fd]);
-			std::cout << "Complete command [" << complete_command << "]" << std::endl;
+			if (tryRegisration(_clients[fd]) == true)
+				std::cout << "SEND WELCOME TO CLIENT" << std::endl;
 		}
-		std::cout << "Received : " << data <<std::endl;
 }
 
 void	Server::signalHandler(int sig)

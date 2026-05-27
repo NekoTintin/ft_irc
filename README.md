@@ -43,6 +43,7 @@ Need to be careful about open FDs and make sure that they are all properly close
 
 - IRC Commands :
    https://fr.wikipedia.org/wiki/Aide:IRC/commandes
+   https://dd.ircdocs.horse/refs/commands/user
 
 
 ----------------------------------------------------------------------------
@@ -170,7 +171,7 @@ NICK
 USER
 JOIN
 
-Puis appelle : ////// CREER LE BON HANDLER
+Puis appelle : Handler ----> ok
 rester avec un enum
 
 handlePass() -> parametre un mot de passe 
@@ -213,10 +214,10 @@ Stocker dans Client.
 -> Objectif :
 donner une identité IRC au client.
 
-7.Implémenter USER
+7.Implémenter USER - NE PAS OUBLIER DE CHERCKER SI TOKEN[1] N'EST PAS VIDE DANS NICK
 Stocker :
-username
-realname
+username---------> ok
+realname---------> ok
 Vérifier syntaxe minimale.
 -> Objectif :
 compléter l’identité IRC.
@@ -227,10 +228,10 @@ PASS ok
 NICK ok
 USER ok
 
-Le client devient :
-registered
+Le client devient : ------------> ok
+registered ---------------------> ok
 Le serveur envoie :
-001 Welcome
+001 Welcome J'EN SUIS LA => COMMENT FAIRE POUR QUE SERVER REPONDE AU BON CLIENT
 -> Objectif :
 permettre au client d’utiliser IRC.
 

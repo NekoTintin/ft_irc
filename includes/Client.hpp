@@ -25,7 +25,15 @@ class Client {
     std::string getNickname();
     void        setNickname(std::string nickame);
     bool        getNicknamestatus();
+
+    std::string getUsername();
+    void        setUsername(std::string username);
+    bool        getUsernamestatus();
   
+    std::string getRealname();
+    void        setRealname(std::string realname);
+    bool        getRealnamestatus();
+
     private:
         int          _fd;
         std::string _buffer;
@@ -33,6 +41,10 @@ class Client {
         bool        _correctPassword;
         std::string _nickname;
         bool        _nicknameset;
+        std::string _username;
+        bool        _usernameset;
+        std::string _realname;
+        bool        _realnameset;
 
 };
 

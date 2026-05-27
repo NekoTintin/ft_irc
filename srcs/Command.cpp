@@ -88,7 +88,9 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
         case 10: handlePrivmsg(); break;
         case 11: handleQuit(); break;
         case 12: handleTopic(); break;
-        case 13: handleUser(); break;
+        case 13:
+            if (handleUser(Token, server, client) == true) break;
+            return (false);
     }
     return(true);
 }
