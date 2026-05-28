@@ -38,7 +38,7 @@ class Server {
 		void		cleanServer();
 		std::string	getPassword();
 		bool		NicknameExists(std::string nickname);
-		bool		tryRegisration(Client client);
+		bool		tryRegisration(Client &client);
 		
 		static void	signalHandler(int sig);
 

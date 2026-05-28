@@ -105,7 +105,7 @@ std::vector<std::string> Command::Tokenize(std::string line)
 
     while (i < line.size())
     {
-        while (line[i] == ' ')
+        while (i < line.size() && line[i] == ' ')
             i++;
         begin_word = i;
         if (line[i] == ':')

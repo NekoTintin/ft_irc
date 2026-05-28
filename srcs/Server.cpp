@@ -144,7 +144,7 @@ void	Server::acceptNewClient()
 	std::cout << "New client connected: fd " << clientFD << std::endl;
 }
 
-bool	Server::tryRegisration(Client client)
+bool	Server::tryRegisration(Client &client)
 {
 	if (client.getNicknamestatus() == true && client.getCorrectPassword() == true
 				&& client.getUsernamestatus() == true && client.getRealnamestatus() == true

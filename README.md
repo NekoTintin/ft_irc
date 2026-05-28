@@ -25,6 +25,11 @@ Need to be careful about open FDs and make sure that they are all properly close
 - Poll():
     https://bousk.developpez.com/cours/reseau-c++/TCP/05-envoi-reception-serveur/
     https://www.ibm.com/docs/fr/i/7.5.0?topic=designs-using-poll-instead-select
+
+- Send():
+   https://pubs.opengroup.org/onlinepubs/009696599/functions/send.html
+   https://linux.die.net/man/2/send
+   https://www.geeksforgeeks.org/cpp/socket-programming-in-cpp/
     
 - Sockets:
     https://youtu.be/gntyAFoZp-E?si=g4ap0MMGicZ-UDn7
