@@ -85,7 +85,7 @@ bool	Server::socketSetup() {
 	return (true);
 }
 
-//Connect the server Socket to the poll() event checker
+// Connect the server Socket to the poll() event checker
 void	Server::addServertoPoll()
 {
 	pollfd	server_fd;
