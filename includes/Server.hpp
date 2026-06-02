@@ -35,6 +35,7 @@ class Server {
 		void		removeClient(int fd);
 		void		acceptNewClient();
 		void		receiveFromClient(int fd);
+		bool		sendToClient(int fd, const std::string &message);
 		void		cleanServer();
 		std::string	getPassword();
 		bool		NicknameExists(std::string nickname);
