@@ -257,10 +257,10 @@ void	Server::runServerLoop()
 
 		for (size_t i = 0; i < _pollfds.size(); i++)
 		{
-    		int fd = _pollfds[i].fd;
+			int fd = _pollfds[i].fd;
 
-		    if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))
-    		{
+			if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))
+			{
 				if (fd != _socketFD)
 				{
 					removeClient(fd);
@@ -268,7 +268,7 @@ void	Server::runServerLoop()
 						i--;
 				}
 				continue;
-    		}
+			}
 
 			if (fd == _socketFD && (_pollfds[i].revents & POLLIN)) // Socket serveur et connexion entrante
 			{
@@ -282,9 +282,7 @@ void	Server::runServerLoop()
 				continue;
 			}
 		}
-
 	}
-
 	cleanServer();
 }
 
