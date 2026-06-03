@@ -17,13 +17,14 @@
 #include "Client.hpp"
 
 bool handleUser(std::vector<std::string> &token, Server &server, Client &client) {
-	(void) server;
+	(void)server;
 	std::cout << "HANDLE USER" << std::endl;
+	std::cout << "Token size: " << token.size() << std::endl;
 	if (token.size() != 5) {
 		std::cerr << "Wrong number of arguments" << std::endl;
 		return (false);
 	}
-	if (token[2] != "0" || token[3] != "*" || correctname(token[1])==false) {
+	if (correctname(token[1]) == false) {
 		std::cerr << "Wrong arguments" << std::endl;
 		return (false);
 	}
