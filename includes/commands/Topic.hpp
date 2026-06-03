@@ -1,8 +1,13 @@
 #ifndef TOPIC_HPP
 # define TOPIC_HPP
 
-#include "iostream"
+# include <iostream>
+# include <vector>
+# include "Reply.hpp"
 
-bool handleTopic();
+class Server;
+class Client;
+
+bool handleTopic(std::vector<std::string> &Token, Server &server, Client &client);
 
 #endif

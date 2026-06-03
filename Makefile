@@ -11,6 +11,7 @@ SRCS = 	\
 		srcs/Server.cpp \
 		srcs/Command.cpp \
 		srcs/Utils.cpp \
+		srcs/commands/Cap.cpp \
 		srcs/commands/Invite.cpp \
 		srcs/commands/Join.cpp \
 		srcs/commands/Kick.cpp \
@@ -31,6 +32,7 @@ HEADER_LIST =	\
 				Server.hpp \
 				Utils.hpp \
 				Reply.hpp \
+				commands/Cap.hpp \
 				commands/Invite.hpp \
 				commands/Join.hpp \
 				commands/Kick.hpp \

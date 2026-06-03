@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <bits/stdc++.h>
+#include "commands/Cap.hpp"
 #include "commands/Invite.hpp"
 #include "commands/Join.hpp"
 #include "commands/Kick.hpp"
@@ -24,6 +25,7 @@ class Channel;
 
 typedef enum e_type {
 	DEFAULT,
+	CAP,
 	INVITE,
 	JOIN,
 	KICK,
@@ -31,30 +33,30 @@ typedef enum e_type {
 	NICK,
 	PART,
 	PASS,
-    PING,
-    PONG,
-    PRIVMSG,
-    QUIT,
-    TOPIC,
-    USER,
-    ERROR,
+	PING,
+	PONG,
+	PRIVMSG,
+	QUIT,
+	TOPIC,
+	USER,
+	ERROR,
 }	t_type;
 
 class Command {
-    public:
+	public:
 		Command();
 		~Command();
-        std::vector<std::string> Tokenize(std::string line);
-        int processLine(std::string line, Server &server, Client &client);
-        bool isaCommand(std::string tocheck);
-        int findCommandIndex(std::string _command);
-        int commandType(int i);
-        bool selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client);
+		std::vector<std::string> Tokenize(std::string line);
+		int processLine(std::string line, Server &server, Client &client);
+		bool isaCommand(std::string tocheck);
+		int findCommandIndex(std::string _command);
+		int commandType(int i);
+		bool selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client);
 
-    private:
-        std::string                 _command;
-        std::vector<std::string>    _args;
-        std::vector<std::string>    _standardCommands;
+	private:
+		std::string					_command;
+		std::vector<std::string>	_args;
+		std::vector<std::string>	_standardCommands;
 };
 
 #endif

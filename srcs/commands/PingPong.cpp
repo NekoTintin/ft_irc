@@ -6,15 +6,24 @@
 */
 
 #include "commands/PingPong.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
-bool handlePing()
+bool handlePing(std::vector<std::string> &Token, Server &server, Client &client)
 {
+    (void)Token;
+    (void)server;
+    (void)client;
     std::cout << "HANDLE PING" << std::endl;
     return (true);
 }
 
-bool handlePong()
+bool handlePong(std::vector<std::string> &Token, Server &server, Client &client)
 {
+    (void)Token;
+    (void)server;
+    (void)client;
     std::cout << "HANDLE PONG" << std::endl;
     return (true);
 }

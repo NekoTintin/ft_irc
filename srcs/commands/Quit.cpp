@@ -1,11 +1,17 @@
 /*  Deconnexion propre
-    QUIT :bye
+	QUIT :bye
 */
 
 #include "commands/Quit.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
-bool handleQuit()
+bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client)
 {
-    std::cout << "HANDLE QUIT" << std::endl;
-    return (true);
+	(void)Token;
+	(void)server;
+	(void)client;
+	std::cout << "HANDLE QUIT" << std::endl;
+	return (true);
 }
