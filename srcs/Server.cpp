@@ -191,10 +191,12 @@ void	Server::receiveFromClient(int fd)
 		std::string complete_command = _clients[fd].getCommand();
 		_clients[fd].removeCommand();
 		Command	_newCommand;
-		_newCommand.processLine(complete_command, *this, _clients[fd], Channel());
+		_newCommand.processLine(complete_command, *this, _clients[fd]);
 		if (tryRegistration(_clients[fd]) == true) {
-			std::string welcome = RPL_WELCOME(_clients[fd].getNickname(), _clients[fd].getUsername(), "localhost");
-			sendToClient(fd, welcome);
+			sendToClient(fd, RPL_WELCOME(_clients[fd].getNickname(), _clients[fd].getUsername(), "localhost"));
+			sendToClient(fd, RPL_YOURHOST(_clients[fd].getNickname()));
+			sendToClient(fd, RPL_CREATED(_clients[fd].getNickname(), getDate()));
+			sendToClient(fd, RPL_MYINFO(_clients[fd].getNickname()));
 		}
 	}
 }

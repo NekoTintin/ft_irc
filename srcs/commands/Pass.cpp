@@ -5,7 +5,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handlePass(std::vector<std::string> &Token, Server &server, Client &client, Channel &channel)
+bool handlePass(std::vector<std::string> &Token, Server &server, Client &client)
 {
     std::cout << "HANDLE PASS" << std::endl;
     if (client.getRegistration() == true)
@@ -15,7 +15,8 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client,
     }
     if (Token.size() != 2)
     {
-        server.sendToClient(client.getFd(), #ici);
+        std::string username = client.getNickname().empty() ? "*" : client.getNickname();
+        server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(username, "PASS"));
         return (false);
     }
     if (Token[1] != server.getPassword())

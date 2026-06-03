@@ -9,6 +9,6 @@ class Server;
 class Client;
 class Channel;
 
-bool handlePass(std::vector<std::string> &Token, Server &server, Client &client, Channel &channel);
+bool handlePass(std::vector<std::string> &Token, Server &server, Client &client);
 
 #endif
