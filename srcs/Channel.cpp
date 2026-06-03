@@ -1,17 +1,44 @@
 #include "Channel.hpp"
 
 // Orthodox Canonical Form
-Channel::Channel() : _name(""), _topic("") {}
+// Never called
+Channel::Channel() :
+	_name(""),
+	_topic(""),
+	_isInviteOnly(false),
+	_isProtectedTopic(false),
+	_channelKey(""),
+	_userLimit(0) {}
+
+Channel::Channel(const std::string &name) :
+	_name(name),
+	_topic(""),
+	_isInviteOnly(false),
+	_isProtectedTopic(false),
+	_channelKey(""),
+	_userLimit(0) {}
 
 Channel::~Channel() {}
 
 // Setters
-void Channel::setName(const std::string &name) {
-	_name = name;
-}
-
 void Channel::setTopic(const std::string &topic) {
 	_topic = topic;
+}
+
+void Channel::setInviteOnly(bool inviteOnly) {
+	_isInviteOnly = inviteOnly;
+}
+
+void Channel::setProtectedTopic(bool protectedTopic) {
+	_isProtectedTopic = protectedTopic;
+}
+
+void Channel::setChannelKey(const std::string &key) {
+	_channelKey = key;
+}
+
+void Channel::setUserLimit(std::size_t limit) {
+	_userLimit = limit;
 }
 
 // Getters
@@ -21,4 +48,73 @@ const std::string &Channel::getName() const {
 
 const std::string &Channel::getTopic() const {
 	return (_topic);
+}
+
+const std::size_t &Channel::getUserLimit() const {
+	return (_userLimit);
+}
+
+bool Channel::isInviteOnly() const {
+	return (_isInviteOnly);
+}
+
+bool Channel::isProtectedTopic() const {
+	return (_isProtectedTopic);
+}
+
+bool Channel::isUserOnChannel(const Client *client) const {
+	return (this->_users.find(client->getFd()) != this->_users.end());
+}
+
+bool Channel::isUserOperator(const Client *client) const {
+	return (this->_operators.find(client->getFd()) != this->_operators.end());
+}
+
+// Funcs
+bool Channel::addUser(Server *server, const Client *client, const std::string &key) {
+	// Check if user is already on the channel
+	if (this->isUserOnChannel(client)) {
+		server->sendToClient(client->getFd(), ERR_USERONCHANNEL(client->getNickname(), client->getNickname(), this->_name));
+		return (false);
+	}
+	// Check if channel is full
+	// 0 is infinite users
+	if (this->_userLimit > 0) {
+		if ((this->_users.size() >= this->_userLimit)) {
+			server->sendToClient(client->getFd(), ERR_CHANNELISFULL(client->getNickname(), this->_name));
+			return (false);
+		}
+	}
+	// Check if channel is invite-only
+	if (this->_isInviteOnly) {
+		server->sendToClient(client->getFd(), ERR_INVITEONLYCHAN(client->getNickname(), this->_name));
+		return (false);
+	}
+	// Check if channel is key-protected
+	if (!this->_channelKey.empty()) {
+		if (this->_channelKey != key) {
+			server->sendToClient(client->getFd(), ERR_BADCHANNELKEY(client->getNickname(), this->_name));
+			return (false);
+		}
+	}
+
+	// Add user on channel
+	this->_users.insert(std::make_pair(client->getFd(), client));
+	if (this->_users.size() == 1)
+		this->_operators.insert(std::make_pair(client->getFd(), client));
+
+	return (true);
+}
+
+bool Channel::removeUser(const Client *client) {
+	// Check if user in on channel
+	if (!this->isUserOnChannel(client))
+			return (false);
+	this->_users.erase(client->getFd());
+	this->_operators.erase(client->getFd());
+	if (AUTOOP_ON_LEAVE && !this->_users.empty()) {
+		if (this->_operators.empty())
+			this->_operators.insert(std::make_pair(this->_users.begin()->first, this->_users.begin()->second));
+	}
+	return (this->_users.empty());
 }
