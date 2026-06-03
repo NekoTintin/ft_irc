@@ -236,11 +236,11 @@ USER ok
 Le client devient : ------------> ok
 registered ---------------------> ok
 Le serveur envoie :
-001 Welcome J'EN SUIS LA => COMMENT FAIRE POUR QUE SERVER REPONDE AU BON CLIENT
+001 Welcome J'EN SUIS LA => COMMENT FAIRE POUR QUE SERVER REPONDE AU BON CLIENT ---->ok 
 -> Objectif :
 permettre au client d’utiliser IRC.
 
-9.Créer sendToClient()
+9.Créer sendToClient()---------------> Messages d'erreur des handlers doivent etre envoyes syr ke ckuebt
 
 Wrapper autour de :
 send()

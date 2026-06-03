@@ -9,17 +9,20 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client)
     std::cout << "HANDLE PASS" << std::endl;
     if (client.getRegistration() == true)
     {
-        std::cerr << "Client already registered" << std::endl;
+        server.sendToClient(client.getFd(), "Client already registered");
+        // std::cerr << "Client already registered" << std::endl;
         return (false);
     }
     if (Token.size() != 2 )
     {
-        std::cerr << "Wrong number of arguments" << std::endl;
+        server.sendToClient(client.getFd(), "Wrong number of arguments");
+        // std::cerr << "Wrong number of arguments" << std::endl;
         return (false);
     }
     if (Token[1] != server.getPassword())
     {
-        std::cerr << "Incorrect password - Registration denied" << std::endl;
+        server.sendToClient(client.getFd(), "Incorrect password - Registration denied");
+        // std::cerr << "Incorrect password - Registration denied" << std::endl;
         return (false);
     }
 
@@ -31,6 +34,8 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client)
 /*
 
 A envoyer dans terminal du client pour tester :
+
+nc --crlf 127.0.0.1 6667
 
 printf "PASS pass\r\n" | nc 127.0.0.1 6667
 

@@ -11,6 +11,6 @@ class Channel {
 	private:
 		std::string _name;
 		std::string _topic;
-}
+};
 
 # endif

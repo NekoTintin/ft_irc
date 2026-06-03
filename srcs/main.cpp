@@ -3,7 +3,8 @@
 #include "../includes/Channel.hpp"
 #include "../includes/Command.hpp"
 
-int	main(int argc, char **argv) {
+int	main(int argc, char **argv)
+{
 	Server server;
 
 	if (!server.checkParsing(argc, argv))
