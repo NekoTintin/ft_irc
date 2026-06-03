@@ -7,6 +7,7 @@ INCLUDE_DIR = includes/
 SRCS = 	\
 		srcs/main.cpp \
 		srcs/Client.cpp \
+		srcs/Channel.cpp \
 		srcs/Server.cpp \
 		srcs/Command.cpp \
 		srcs/Utils.cpp \
@@ -25,9 +26,11 @@ SRCS = 	\
 
 HEADER_LIST =	\
 				Client.hpp \
+				Channel.hpp \
 				Command.hpp \
 				Server.hpp \
 				Utils.hpp \
+				Reply.hpp \
 				commands/Invite.hpp \
 				commands/Join.hpp \
 				commands/Kick.hpp \

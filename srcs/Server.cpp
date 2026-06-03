@@ -107,7 +107,6 @@ void	Server::removeClient(int fd)
 				break;
 			}
 		}
-	
 		_clients.erase(fd);
 		std::cout << "Client disconnected: fd " << fd << std::endl;
 	}
@@ -144,8 +143,14 @@ void	Server::acceptNewClient()
 	std::cout << "New client connected: fd " << clientFD << std::endl;
 }
 
-bool	Server::tryRegisration(Client &client)
+bool	Server::tryRegistration(Client &client)
 {
+	if (!client.getCorrectPassword() && client.getNicknamestatus() && client.getUsernamestatus()
+			&& client.getRealnamestatus() && !client.getRegistration()) {
+		sendToClient(client.getFd(), ERR_PASSWDMISMATCH(client.getNickname()));
+		removeClient(client.getFd());
+		return (false);
+	}
 	if (client.getNicknamestatus() == true && client.getCorrectPassword() == true
 				&& client.getUsernamestatus() == true && client.getRealnamestatus() == true
 				&& client.getRegistration() == false)
@@ -154,6 +159,7 @@ bool	Server::tryRegisration(Client &client)
 			std::cout << "Client registered" << std::endl;
 			return (true);
 		}
+	
 	return (false);
 }
 
@@ -176,22 +182,21 @@ void	Server::receiveFromClient(int fd)
 		removeClient(fd);
 		return;
 	}
-		buffer[bytesRecv] = '\0';
 
-		std::string data(buffer);
-		_clients[fd].addToBuffer(data);
-		while (_clients[fd].isComplete())
-		{
-			std::string complete_command = _clients[fd].getCommand();
-			_clients[fd].removeCommand();
-			Command	_newCommand;
-			_newCommand.processLine(complete_command, *this, _clients[fd]);
-			if (tryRegisration(_clients[fd]) == true) {
-				std::string nick = _clients[fd].getNickname();
-				std::string welcome = ":localhost 001 " + nick + " :Welcome to our ircserv " + nick + "!";
-				sendToClient(fd, welcome);
-			}
+	buffer[bytesRecv] = '\0';
+
+	std::string data(buffer);
+	_clients[fd].addToBuffer(data);
+	while (_clients[fd].isComplete()) {
+		std::string complete_command = _clients[fd].getCommand();
+		_clients[fd].removeCommand();
+		Command	_newCommand;
+		_newCommand.processLine(complete_command, *this, _clients[fd], Channel());
+		if (tryRegistration(_clients[fd]) == true) {
+			std::string welcome = RPL_WELCOME(_clients[fd].getNickname(), _clients[fd].getUsername(), "localhost");
+			sendToClient(fd, welcome);
 		}
+	}
 }
 
 bool	Server::sendToClient(int fd, const std::string &msg) {
@@ -203,9 +208,8 @@ bool	Server::sendToClient(int fd, const std::string &msg) {
 
 	// Add \r and \n if not present
 	std::string formatted_msg = msg;
-	if (msg.size() < 2 || msg.substr(msg.size() - 2) != "\r\n") {
+	if (msg.size() < 2 || msg.substr(msg.size() - 2) != "\r\n")
 		formatted_msg += "\r\n";
-	}
 
 	// Send to client
 	ssize_t bytesSize = send(fd, formatted_msg.c_str(), formatted_msg.size(), MSG_NOSIGNAL);

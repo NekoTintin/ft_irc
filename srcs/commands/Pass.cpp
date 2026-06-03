@@ -3,26 +3,24 @@
 #include "commands/Pass.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 
-bool handlePass(std::vector<std::string> &Token, Server &server, Client &client)
+bool handlePass(std::vector<std::string> &Token, Server &server, Client &client, Channel &channel)
 {
     std::cout << "HANDLE PASS" << std::endl;
     if (client.getRegistration() == true)
     {
-        server.sendToClient(client.getFd(), "Client already registered");
-        // std::cerr << "Client already registered" << std::endl;
+        server.sendToClient(client.getFd(), ERR_ALREADYREGISTRED(client.getNickname()));
         return (false);
     }
-    if (Token.size() != 2 )
+    if (Token.size() != 2)
     {
-        server.sendToClient(client.getFd(), "Wrong number of arguments");
-        // std::cerr << "Wrong number of arguments" << std::endl;
+        server.sendToClient(client.getFd(), #ici);
         return (false);
     }
     if (Token[1] != server.getPassword())
     {
-        server.sendToClient(client.getFd(), "Incorrect password - Registration denied");
-        // std::cerr << "Incorrect password - Registration denied" << std::endl;
+        //server.sendToClient(client.getFd(), formatMessage(ERR_PASSWDMISMATCH, client, channel));
         return (false);
     }
 
@@ -32,12 +30,9 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client)
 }
 
 /*
-
 A envoyer dans terminal du client pour tester :
 
 nc --crlf 127.0.0.1 6667
 
 printf "PASS pass\r\n" | nc 127.0.0.1 6667
-
-
 */

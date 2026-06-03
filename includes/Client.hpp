@@ -24,11 +24,11 @@ class Client {
     bool        getRegistration();
     void        setRegistration();
 
-    std::string getNickname();
+    const std::string &getNickname() const;
     void        setNickname(std::string nickame);
     bool        getNicknamestatus();
 
-    std::string getUsername();
+    const std::string &getUsername() const;
     void        setUsername(std::string username);
     bool        getUsernamestatus();
   

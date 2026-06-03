@@ -1,6 +1,6 @@
 _This project has been created as part of the 42 curriculum by mlelu, qupollet, tmalkawi._
 
-# ft_irc
+## ft_irc
 
 Recreate a IRC Internet Relay Chat, a text based chat protocol.
 
@@ -20,40 +20,41 @@ How to start :
 Need to be careful about open FDs and make sure that they are all properly closed
 
 
-# Sources
+## Sources
 
 - Poll():
-    https://bousk.developpez.com/cours/reseau-c++/TCP/05-envoi-reception-serveur/
-    https://www.ibm.com/docs/fr/i/7.5.0?topic=designs-using-poll-instead-select
+   - https://bousk.developpez.com/cours/reseau-c++/TCP/05-envoi-reception-serveur/
+   - https://www.ibm.com/docs/fr/i/7.5.0?topic=designs-using-poll-instead-select
 
 - Send():
-   https://pubs.opengroup.org/onlinepubs/009696599/functions/send.html
-   https://linux.die.net/man/2/send
-   https://www.geeksforgeeks.org/cpp/socket-programming-in-cpp/
+   - https://pubs.opengroup.org/onlinepubs/009696599/functions/send.html
+   - https://linux.die.net/man/2/send
+   - https://www.geeksforgeeks.org/cpp/socket-programming-in-cpp/
     
 - Sockets:
-    https://youtu.be/gntyAFoZp-E?si=g4ap0MMGicZ-UDn7
+   - https://youtu.be/gntyAFoZp-E?si=g4ap0MMGicZ-UDn7
 
 - Recve():
-   https://pubs.opengroup.org/onlinepubs/007904975/functions/recv.html
-   https://www.ibm.com/docs/en/zos/2.5.0?topic=functions-recv-receive-data-socket
+   - https://pubs.opengroup.org/onlinepubs/007904975/functions/recv.html
+   - https://www.ibm.com/docs/en/
 
 - Signal :
-   https://www.geeksforgeeks.org/cpp/signal-handling-in-cpp/
+   - https://www.geeksforgeeks.org/cpp/signal-handling-in-cpp/
 
 - Project overview :
-   https://nathaan.me/projects/irc
-   https://modern.ircdocs.horse/
-   https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=connexion
+   - https://nathaan.me/projects/irc
+   - https://modern.ircdocs.horse/
+   - https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=connexion
 
 - IRC Commands :
-   https://fr.wikipedia.org/wiki/Aide:IRC/commandes
-   https://dd.ircdocs.horse/refs/commands/user
+   - https://fr.wikipedia.org/wiki/Aide:IRC/commandes
+   - https://dd.ircdocs.horse/refs/commands/user
+   - https://www.alien.net.au/irc/irc2numerics.html
 
 
 ----------------------------------------------------------------------------
 
-GRANDES LIGNES DU PROJET :
+# GRANDES LIGNES DU PROJET :
 
 Membre A → Réseau / serveur bas niveau
 

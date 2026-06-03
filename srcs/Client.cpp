@@ -88,12 +88,12 @@ bool Client::getNicknamestatus()
     return (_nicknameset);
 }
 
-std::string Client::getNickname()
+const std::string &Client::getNickname() const
 {
     return (_nickname);
 }
 
-std::string Client::getUsername()
+const std::string &Client::getUsername() const
 {
     return (_username);
 }

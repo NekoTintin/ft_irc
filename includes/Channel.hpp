@@ -1,6 +1,7 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
+#include "Client.hpp"
 #include <iostream>
 #include <string>
 #include <map>
@@ -10,6 +11,12 @@ class Channel {
 	public:
 		Channel();
 		~Channel();
+		// Setters
+		void setName(const std::string &name);
+		void setTopic(const std::string &topic);
+		// Getters
+		const std::string &getName() const;
+		const std::string &getTopic() const;
 	private:
 		// Basics
 		std::string _name;

@@ -66,7 +66,7 @@ int Command::commandType(int i)
     return (type);
 }
 
-bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client)
+bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, Channel channel)
 {
     switch (i)
     {
@@ -80,7 +80,7 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
             return (false);
         case 6: handlePart(); break;
         case 7: 
-            if (handlePass(Token, server, client) == true) break;
+            if (handlePass(Token, server, client, channel) == true) break;
             return (false);
         case 8: handlePing(); break;
         case 9: handlePong(); break;
@@ -132,7 +132,7 @@ std::vector<std::string> Command::Tokenize(std::string line)
     return (token);
 }
 
-int Command::processLine(std::string line, Server &server, Client &client)
+int Command::processLine(std::string line, Server &server, Client &client, Channel channel)
 {
     std::vector<std::string>    token = Tokenize(line);
     // int                         handler = 0;
@@ -149,7 +149,7 @@ int Command::processLine(std::string line, Server &server, Client &client)
             _args.push_back(token[i]);
     }
 
-    selectHandler(commandType(findCommandIndex(_command)), token, server, client);
+    selectHandler(commandType(findCommandIndex(_command)), token, server, client, channel);
     // std::cout << "handler = " << handler << std::endl;
 
     // std::cout << "_command : [" << _command << "] " << std::endl;

@@ -18,6 +18,9 @@
 
 #include "Client.hpp"
 #include "Command.hpp"
+#include "Channel.hpp"
+#include "Utils.hpp"
+#include "Reply.hpp"
 
 extern bool g_running;
 
@@ -39,7 +42,7 @@ class Server {
 		void		cleanServer();
 		std::string	getPassword();
 		bool		NicknameExists(std::string nickname);
-		bool		tryRegisration(Client &client);
+		bool		tryRegistration(Client &client);
 		
 		static void	signalHandler(int sig);
 
