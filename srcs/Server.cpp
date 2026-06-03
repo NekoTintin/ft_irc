@@ -85,7 +85,7 @@ bool	Server::socketSetup() {
 	return (true);
 }
 
-//Connect the server Socket to the poll() event checker
+// Connect the server Socket to the poll() event checker
 void	Server::addServertoPoll()
 {
 	pollfd	server_fd;
@@ -162,12 +162,14 @@ void	Server::receiveFromClient(int fd)
 	char	buffer[1024];
 	int		bytesRecv = recv(fd, buffer, sizeof(buffer) - 1, 0);
 
+	// Check for errors and disconnections
 	if (bytesRecv < 0)
 	{
 		std::cerr << "Error with message from client" << std::endl;
 		removeClient(fd);
 		return;
 	}
+	// Check for disconnection (recv returns 0)
 	else if (bytesRecv == 0)
 	{
 		std::cout << "Connection closed" << std::endl;
@@ -184,9 +186,34 @@ void	Server::receiveFromClient(int fd)
 			_clients[fd].removeCommand();
 			Command	_newCommand;
 			_newCommand.processLine(complete_command, *this, _clients[fd]);
-			if (tryRegisration(_clients[fd]) == true)
-				std::cout << "SEND WELCOME TO CLIENT" << std::endl;
+			if (tryRegisration(_clients[fd]) == true) {
+				std::string nick = _clients[fd].getNickname();
+				std::string welcome = ":localhost 001 " + nick + " :Welcome to our ircserv " + nick + "!";
+				sendToClient(fd, welcome);
+			}
 		}
+}
+
+bool	Server::sendToClient(int fd, const std::string &msg) {
+	// Check empty message
+	if (msg.empty()) {
+		std::cerr << "Error: Cannot send empty message to client fd " << fd << "." << std::endl;
+		return (false);
+	}
+
+	// Add \r and \n if not present
+	std::string formatted_msg = msg;
+	if (msg.size() < 2 || msg.substr(msg.size() - 2) != "\r\n") {
+		formatted_msg += "\r\n";
+	}
+
+	// Send to client
+	ssize_t bytesSize = send(fd, formatted_msg.c_str(), formatted_msg.size(), MSG_NOSIGNAL);
+	if (bytesSize < 0) {
+		std::cerr << "Error: Failed to send message to client fd " << fd << "." << std::endl;
+		return (false);
+	}
+	return (true);
 }
 
 void	Server::signalHandler(int sig)
@@ -230,10 +257,10 @@ void	Server::runServerLoop()
 
 		for (size_t i = 0; i < _pollfds.size(); i++)
 		{
-    		int fd = _pollfds[i].fd;
+			int fd = _pollfds[i].fd;
 
-		    if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))
-    		{
+			if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))
+			{
 				if (fd != _socketFD)
 				{
 					removeClient(fd);
@@ -241,7 +268,7 @@ void	Server::runServerLoop()
 						i--;
 				}
 				continue;
-    		}
+			}
 
 			if (fd == _socketFD && (_pollfds[i].revents & POLLIN)) // Socket serveur et connexion entrante
 			{
@@ -255,9 +282,7 @@ void	Server::runServerLoop()
 				continue;
 			}
 		}
-
 	}
-
 	cleanServer();
 }
 

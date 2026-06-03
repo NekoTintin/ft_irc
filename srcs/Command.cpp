@@ -78,7 +78,6 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
         case 5: 
             if (handleNick(Token, server, client) == true) break;
             return (false);
-            
         case 6: handlePart(); break;
         case 7: 
             if (handlePass(Token, server, client) == true) break;
@@ -92,7 +91,7 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
             if (handleUser(Token, server, client) == true) break;
             return (false);
     }
-    return(true);
+    return (true);
 }
 
 std::vector<std::string> Command::Tokenize(std::string line)

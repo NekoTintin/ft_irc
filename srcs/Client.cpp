@@ -31,17 +31,26 @@ void Client::addToBuffer(const std::string &data)
 
 bool Client::isComplete()
 {
+    // Empty Buffer
+    if (this->_buffer.empty())
+        return (false);
+    
     std::size_t found = _buffer.find("\r\n");
     if (found != std::string::npos)
         return (true);
+
+    if (this->_buffer.size() >= NB_CHARS)
+        return (true);
     return (false);
 }
+
 std::string Client::getCommand()
 {
     std::size_t found = _buffer.find("\r\n");
     std::string complete_command = _buffer.substr(0, found);
     return (complete_command);
 }
+
 void Client::removeCommand()
 {
     std::size_t found = _buffer.find("\r\n");

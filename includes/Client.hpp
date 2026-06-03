@@ -1,6 +1,8 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
+# define NB_CHARS 512
+
 #include <iostream>
 #include <string>
 
