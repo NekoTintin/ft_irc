@@ -31,6 +31,7 @@ bool Command::isaCommand(std::string tocheck)
 	}
 	return (false);
 }
+
 int Command::findCommandIndex(std::string _command)
 {
 	size_t i = 0; 
@@ -68,7 +69,7 @@ int Command::commandType(int i)
 	return (type);
 }
 
-bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client)
+bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, Channel &channel)
 {
 	switch (i)
 	{
@@ -85,7 +86,7 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
 		case 10: return (handlePong(Token, server, client));
 		case 11: return (handlePrivmsg(Token, server, client));
 		case 12: return (handleQuit(Token, server, client));
-		case 13: return (handleTopic(Token, server, client));
+		case 13: return (handleTopic(Token, server, client, channel));
 		case 14: return (handleUser(Token, server, client));
 		case 15: return (false);
 	}
@@ -94,11 +95,11 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
 
 std::vector<std::string> Command::Tokenize(std::string line)
 {
-	size_t                      i = 0;
-	size_t                      j = 0;
-	size_t                      begin_word = 0;
-	std::string                 temp_str;
-	std::vector<std::string>    token;
+	size_t						i = 0;
+	size_t						j = 0;
+	size_t						begin_word = 0;
+	std::string					temp_str;
+	std::vector<std::string>	token;
 
 	while (i < line.size())
 	{
@@ -130,7 +131,7 @@ std::vector<std::string> Command::Tokenize(std::string line)
 	return (token);
 }
 
-int Command::processLine(std::string line, Server &server, Client &client)
+int Command::processLine(std::string line, Server &server, Client &client, Channel &channel)
 {
 	if (line.empty() && line[line.length() - 1] != '\n')
 		return (ERROR);
@@ -140,7 +141,7 @@ int Command::processLine(std::string line, Server &server, Client &client)
 	_command.clear();
 	_args.clear();
 
-	std::vector<std::string>    token = Tokenize(line);
+	std::vector<std::string>	token = Tokenize(line);
 	if (token.empty())
 		return (ERROR);
 	if (!isaCommand(token[0]))
@@ -150,7 +151,7 @@ int Command::processLine(std::string line, Server &server, Client &client)
 		_args.push_back(token[i]);
 
 	int command_index = findCommandIndex(_command);
-	selectHandler(commandType(command_index), token, server, client);
+	selectHandler(commandType(command_index), token, server, client, channel);
 
 	return (0);
 }

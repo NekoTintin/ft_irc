@@ -47,11 +47,11 @@ class Command {
 		Command();
 		~Command();
 		std::vector<std::string> Tokenize(std::string line);
-		int processLine(std::string line, Server &server, Client &client);
+		int processLine(std::string line, Server &server, Client &client, Channel &channel);
 		bool isaCommand(std::string tocheck);
 		int findCommandIndex(std::string _command);
 		int commandType(int i);
-		bool selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client);
+		bool selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, Channel &channel);
 
 	private:
 		std::string					_command;
