@@ -9,5 +9,5 @@
 class Server;
 class Client;
 
-bool handleNick(std::vector<std::string> &token, Server &server, Client &client);
+bool handleNick(std::vector<std::string> &token, Server &server, Client &client, bool _hasTrailing);
 #endif

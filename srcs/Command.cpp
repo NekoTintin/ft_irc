@@ -69,21 +69,21 @@ int Command::commandType(int i)
 	return (type);
 }
 
-bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client)
+bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, bool _hasTrailing)
 {
 	switch (i)
 	{
 		case 0: return (false);
 		case 1: return (handleCap(Token, server, client));
-		case 2: return (handleInvite(Token, server, client));
-		case 3: return (handleJoin(Token, server, client));
+		case 2: return (handleInvite(Token, server, client, _hasTrailing));
+		case 3: return (handleJoin(Token, server, client, _hasTrailing));
 		case 4: return (handleKick(Token, server, client));
-		case 5: return (handleMode(Token, server, client));
-		case 6: return (handleNick(Token, server, client));
+		case 5: return (handleMode(Token, server, client, _hasTrailing));
+		case 6: return (handleNick(Token, server, client, _hasTrailing));
 		case 7: return (handlePart(Token, server, client));
-		case 8: return (handlePass(Token, server, client));
-		case 9: return (handlePing(Token, server, client));
-		case 10: return (handlePong(Token, server, client));
+		case 8: return (handlePass(Token, server, client, _hasTrailing));
+		case 9: return (handlePing(Token, server, client, _hasTrailing));
+		case 10: return (handlePong(Token, server, client, _hasTrailing));
 		case 11: return (handlePrivmsg(Token, server, client));
 		case 12: return (handleQuit(Token, server, client));
 		case 13: return (handleTopic(Token, server, client));
@@ -93,7 +93,7 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
 	return (true);
 }
 
-std::vector<std::string> Command::Tokenize(std::string line)
+std::vector<std::string> Command::Tokenize(std::string line, bool *_hasTrailing)
 {
 	size_t						i = 0;
 	size_t						j = 0;
@@ -108,6 +108,7 @@ std::vector<std::string> Command::Tokenize(std::string line)
 		begin_word = i;
 		if (line[i] == ':')
 		{
+			*_hasTrailing = true;
 			while (i < line.size())
 			{
 				j++;
@@ -141,7 +142,9 @@ int Command::processLine(std::string line, Server &server, Client &client)
 	_command.clear();
 	_args.clear();
 
-	std::vector<std::string>	token = Tokenize(line);
+	bool _hasTrailing = false;
+
+	std::vector<std::string>	token = Tokenize(line, &_hasTrailing);
 	if (token.empty())
 		return (ERROR);
 	if (!isaCommand(token[0]))
@@ -151,7 +154,7 @@ int Command::processLine(std::string line, Server &server, Client &client)
 		_args.push_back(token[i]);
 
 	int command_index = findCommandIndex(_command);
-	selectHandler(commandType(command_index), token, server, client);
+	selectHandler(commandType(command_index), token, server, client, _hasTrailing);
 
 	return (0);
 }

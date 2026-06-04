@@ -8,7 +8,7 @@
 class Server;
 class Client;
 
-bool handlePing(std::vector<std::string> &Token, Server &server, Client &client);
-bool handlePong(std::vector<std::string> &Token, Server &server, Client &client);
+bool handlePing(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
+bool handlePong(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
 
 #endif

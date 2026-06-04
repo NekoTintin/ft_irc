@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client);
+bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
 
 #endif

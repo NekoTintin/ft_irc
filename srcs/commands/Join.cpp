@@ -9,11 +9,12 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client)
+bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing)
 {
 	(void)Token;
 	(void)server;
 	(void)client;
+	(void)_hasTrailing;
 	std::cout << "HANDLE JOIN" << std::endl;
 	return (true);
 }

@@ -190,6 +190,8 @@ void	Server::receiveFromClient(int fd)
 	while (_clients[fd].isComplete()) {
 		std::string complete_command = _clients[fd].getCommand();
 		_clients[fd].removeCommand();
+		if (complete_command.empty())
+			continue;
 		Command	_newCommand;
 		_newCommand.processLine(complete_command, *this, _clients[fd]);
 		if (tryRegistration(_clients[fd]) == true) {

@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien);
+bool handleInvite(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
 
 #endif

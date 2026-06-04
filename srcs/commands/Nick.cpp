@@ -9,7 +9,7 @@ Servers MAY allow extra characters, as long as they do not introduce ambiguity i
 #include "Client.hpp"
 #include "Utils.hpp"
 
-bool handleNick(std::vector<std::string> &token, Server &server, Client &client)
+bool handleNick(std::vector<std::string> &token, Server &server, Client &client, bool _hasTrailing)
 {
 	std::cout << "HANDLE NICK" << std::endl;
 	if (token.size() != 2)
@@ -18,7 +18,7 @@ bool handleNick(std::vector<std::string> &token, Server &server, Client &client)
 		server.sendToClient(client.getFd(), ERR_NONICKNAMEGIVEN(client.getNickname()));
 		return (false);
 	}
-	if (correctnamenickname(token[1]) == false)
+	if (correctnamenickname(token[1]) == false || _hasTrailing == true)
 	{
 		std::cerr << "Incorrect Nickname" << std::endl;
 		server.sendToClient(client.getFd(), ERR_ERRONEUSNICKNAME(client.getNickname(), token[1]));

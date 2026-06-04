@@ -9,6 +9,6 @@ class Server;
 class Client;
 class Channel;
 
-bool handlePass(std::vector<std::string> &Token, Server &server, Client &client);
+bool handlePass(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
 
 #endif

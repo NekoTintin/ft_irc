@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handleMode(std::vector<std::string> &Token, Server &server, Client &client);
+bool handleMode(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
 
 #endif

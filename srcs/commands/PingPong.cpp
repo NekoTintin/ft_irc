@@ -11,10 +11,10 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handlePing(std::vector<std::string> &Token, Server &server, Client &client){
+bool handlePing(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing){
 	std::cout << "HANDLE PING" << std::endl;
 	std::string pongStr;
-	if (Token.size() >= 2 && !Token[1].empty())
+	if ((Token.size() >= 2 && !Token[1].empty()) || _hasTrailing == true)
 	{
 		pongStr = ":localhost PONG localhost :" + Token[1];
 		server.sendToClient(client.getFd(), pongStr);
@@ -24,10 +24,10 @@ bool handlePing(std::vector<std::string> &Token, Server &server, Client &client)
 	return (false);
 }
 
-bool handlePong(std::vector<std::string> &Token, Server &server, Client &client){
+bool handlePong(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing){
 	(void) server;
 	std::cout << "HANDLE PONG" << std::endl;
-	if (Token.size() >= 2 && !Token[1].empty())
+	if ((Token.size() >= 2 && !Token[1].empty()) || _hasTrailing == true)
 	{
 		std::cout << "Received PONG from " << client.getNickname() << std::endl;
 		return (true);

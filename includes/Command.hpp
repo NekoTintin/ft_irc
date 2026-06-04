@@ -46,12 +46,12 @@ class Command {
 	public:
 		Command();
 		~Command();
-		std::vector<std::string> Tokenize(std::string line);
+		std::vector<std::string> Tokenize(std::string line, bool *_hasTrailing);
 		int processLine(std::string line, Server &server, Client &client);
 		bool isaCommand(std::string tocheck);
 		int findCommandIndex(std::string _command);
 		int commandType(int i);
-		bool selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client);
+		bool selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, bool _hasTrailing);
 
 	private:
 		std::string					_command;
