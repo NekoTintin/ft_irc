@@ -244,7 +244,7 @@ Le serveur envoie :
 -> Objectif :
 permettre au client d’utiliser IRC.
 
-9.Créer sendToClient()---------------> Messages d'erreur des handlers doivent etre envoyes sur le client
+9.Créer sendToClient()---------------> Messages d'erreur des handlers doivent etre envoyes sur le client ---> ok
 
 Wrapper autour de :
 send()
@@ -338,7 +338,7 @@ removeClient(fd).
 -> Objectif :
 gérer les déconnexions IRC proprement.
 
-15.Implémenter PING / PONG
+15.Implémenter PING / PONG-------------------> OK MAIS IMPLEMENTER LE SYSTEME DE TIMEOUT
 Le serveur envoie :
 PING
 Le client répond :

@@ -39,6 +39,7 @@
 #define ERR_CHANOPRIVSNEEDED(nick, channel) (std::string(":localhost 482 ") + nick + " " + channel + " :You're not channel operator")
 
 // 7. Messages
-#define ERR_NORECIPIENT() (std::string(":localhost 411 ") + " " ":No recipient")
-#define ERR_NOTEXTTOSEND() (std::string(":localhost 412 ") + " " ":No text to send")
+#define ERR_NORECIPIENT() (std::string(":localhost 411 ") + ":No recipient")
+#define ERR_NOTEXTTOSEND() (std::string(":localhost 412 ") + ":No text to send")
 #define RPL_TEXTTOSEND(sender_nick, user, nick, messagetext) (std::string(":" + sender_nick + "!" + user + "@localhost ") + "PRIVMSG " + nick + " :" + messagetext)
+#define ERR_NOORIGIN() (std::string(":localhost 409 ") + ":No origin specified")
