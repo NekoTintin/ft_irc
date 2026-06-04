@@ -51,6 +51,9 @@ Need to be careful about open FDs and make sure that they are all properly close
    - https://dd.ircdocs.horse/refs/commands/user
    - https://www.alien.net.au/irc/irc2numerics.html
 
+- IRSSI :
+   - https://doc.fedora-fr.org/wiki/Irssi_-_client_IRC_en_mode_console
+
 
 ----------------------------------------------------------------------------
 
@@ -241,7 +244,7 @@ Le serveur envoie :
 -> Objectif :
 permettre au client d’utiliser IRC.
 
-9.Créer sendToClient()---------------> Messages d'erreur des handlers doivent etre envoyes syr ke ckuebt
+9.Créer sendToClient()---------------> Messages d'erreur des handlers doivent etre envoyes sur le client
 
 Wrapper autour de :
 send()
@@ -269,13 +272,55 @@ Broadcast le JOIN.
 -> Objectif :
 permettre aux users d’entrer dans des channels.
 
-12.Implémenter PRIVMSG
+12.Implémenter PRIVMSG ---------------> OK --> RESTE A GERER PRIVMSG AVEC LE CHANNEL
 Envoyer :
 user → user,
 user → channel.
 Le serveur redistribue les messages.
 -> Objectif :
 faire fonctionner le chat IRC.
+
+Format :
+PRIVMSG <target> :<message>
+Exemple :
+PRIVMSG bob :Hello Bob
+ou plus tard :
+
+PRIVMSG #42 :Hello channel
+Ce qu'il faut gérer maintenant
+
+1. Client enregistré------------------> OK
+Le client doit être registered.
+Sinon :
+451 ERR_NOTREGISTERED
+
+2. Vérifier les arguments------------------> OK
+Pas de destinataire
+PRIVMSG
+→ 411 ERR_NORECIPIENT
+
+Pas de texte
+PRIVMSG bob
+→ 412 ERR_NOTEXTTOSEND
+
+3. Chercher le destinataire------------------> OK
+Tu reçois :
+PRIVMSG bob :Hello
+Tu dois :
+chercher un Client
+dont nickname == bob
+Si introuvable
+401 ERR_NOSUCHNICK
+
+4. Envoyer le message------------------------> OK
+Quand tu trouves Bob :
+Construire :
+:<sender_nick>!<username>@localhost PRIVMSG <target_nick> :<message> 
+:alice!malu@localhost PRIVMSG bob :Hello
+et :
+sendToClient(fd_de_bob, ...)
+
+------------------------------------------------------------------------------------------------------------------------------------
 
 13.Implémenter le broadcast
 Envoyer un message à :

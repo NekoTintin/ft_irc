@@ -1,11 +1,13 @@
-// Definit le pseudo du client
+/*
+Servers MUST allow at least all alphanumerical characters, square and curly brackets ([]{}),
+backslashes (\), and pipe (|) characters in nicknames, and MAY disallow digits as the first character.
+Servers MAY allow extra characters, as long as they do not introduce ambiguity in other commands
+*/
 
 #include "commands/Nick.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Utils.hpp"
-
-// CHECKER SI TOKEN[1] EST VIDE 
 
 bool handleNick(std::vector<std::string> &token, Server &server, Client &client)
 {
@@ -32,11 +34,3 @@ bool handleNick(std::vector<std::string> &token, Server &server, Client &client)
 	std::cout << "Nickname set" << std::endl;
 	return (true);
 }
-
-/*
-
-A envoyer dans terminal du client pour tester :
-
-printf "NICK nickiki\r\n" | nc 127.0.0.1 6667
-
-*/

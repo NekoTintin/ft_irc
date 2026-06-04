@@ -35,14 +35,19 @@ class Server {
 		bool		socketSetup();
 		void		addServertoPoll(); //ajoute le server a pollfds
 		void		runServerLoop();
+
 		void		removeClient(int fd);
 		void		acceptNewClient();
 		void		receiveFromClient(int fd);
-		bool		sendToClient(int fd, const std::string &message);
 		void		cleanServer();
+
 		std::string	getPassword();
-		bool		NicknameExists(std::string nickname);
 		bool		tryRegistration(Client &client);
+		bool		NicknameExists(std::string nickname);
+
+		bool		sendToClient(int fd, const std::string &message);
+
+		Client*			findClient(const std::string &Nickname);
 		
 		static void	signalHandler(int sig);
 
