@@ -322,3 +322,31 @@ Client* Server::findClient(const std::string &Nickname)
 	}
 	return (NULL); 
 }
+
+Channel		*Server::findChannel(const std::string &name) {
+	std::map<std::string, Channel>::iterator it = _channels.begin();
+
+	while (it != _channels.end())
+	{
+		if (name == it->second.getName())
+			return (&it->second);
+		it++;
+	}
+	return (NULL); 
+}
+
+bool			Server::createChannel(const std::string &name) {
+	if (!findChannel(name))
+		return (false);
+	Channel newChannel(name);
+	this->_channels[name] = newChannel;
+	return (true);
+}
+
+bool			Server::removeChannel(const std::string &name) {
+	Channel	*toDelete = findChannel(name);
+	if (!toDelete)
+		return (false);
+	this->_channels.erase(name);
+	return (true);
+}

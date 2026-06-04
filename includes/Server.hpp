@@ -48,7 +48,13 @@ class Server {
 		bool		sendToClient(int fd, const std::string &message);
 
 		Client*			findClient(const std::string &Nickname);
-		
+
+		// Channels func
+		Channel*		findChannel(const std::string &name);
+		bool			createChannel(const std::string &name);
+		bool			removeChannel(const std::string &name);
+
+		// Signal
 		static void	signalHandler(int sig);
 
 	private:
@@ -62,10 +68,10 @@ class Server {
 
 		// Infos de chaque client, accessibles par son fd.
 		// Clients[5] contient le Client associe au fd=5.
-		std::map<int, Client>	_clients;				
-		
+		std::map<int, Client>	_clients;
+
+		// List of channels
+		std::map<std::string, Channel> _channels;
 };
-
-
 
 # endif

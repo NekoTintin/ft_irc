@@ -3,7 +3,7 @@
 // Orthodox Canonical Form
 // Never called
 Channel::Channel() :
-	_name(""),
+	_name("#default"),
 	_topic(""),
 	_isInviteOnly(false),
 	_isProtectedTopic(false),
@@ -21,57 +21,57 @@ Channel::Channel(const std::string &name) :
 Channel::~Channel() {}
 
 // Setters
-void Channel::setTopic(const std::string &topic) {
+void	Channel::setTopic(const std::string &topic) {
 	_topic = topic;
 }
 
-void Channel::setInviteOnly(bool inviteOnly) {
+void	Channel::setInviteOnly(bool inviteOnly) {
 	_isInviteOnly = inviteOnly;
 }
 
-void Channel::setProtectedTopic(bool protectedTopic) {
+void	Channel::setProtectedTopic(bool protectedTopic) {
 	_isProtectedTopic = protectedTopic;
 }
 
-void Channel::setChannelKey(const std::string &key) {
+void	Channel::setChannelKey(const std::string &key) {
 	_channelKey = key;
 }
 
-void Channel::setUserLimit(std::size_t limit) {
+void	Channel::setUserLimit(std::size_t limit) {
 	_userLimit = limit;
 }
 
 // Getters
-const std::string &Channel::getName() const {
+const	std::string &Channel::getName() const {
 	return (_name);
 }
 
-const std::string &Channel::getTopic() const {
+const	std::string &Channel::getTopic() const {
 	return (_topic);
 }
 
-const std::size_t &Channel::getUserLimit() const {
+const	std::size_t &Channel::getUserLimit() const {
 	return (_userLimit);
 }
 
-bool Channel::isInviteOnly() const {
+bool	Channel::isInviteOnly() const {
 	return (_isInviteOnly);
 }
 
-bool Channel::isProtectedTopic() const {
+bool	Channel::isProtectedTopic() const {
 	return (_isProtectedTopic);
 }
 
-bool Channel::isUserOnChannel(const Client *client) const {
+bool	Channel::isUserOnChannel(const Client *client) const {
 	return (this->_users.find(client->getFd()) != this->_users.end());
 }
 
-bool Channel::isUserOperator(const Client *client) const {
+bool	Channel::isUserOperator(const Client *client) const {
 	return (this->_operators.find(client->getFd()) != this->_operators.end());
 }
 
 // Funcs
-bool Channel::addUser(Server *server, const Client *client, const std::string &key) {
+bool	Channel::addUser(Server *server, const Client *client, const std::string &key) {
 	// Check if user is already on the channel
 	if (this->isUserOnChannel(client)) {
 		server->sendToClient(client->getFd(), ERR_USERONCHANNEL(client->getNickname(), client->getNickname(), this->_name));
@@ -106,7 +106,7 @@ bool Channel::addUser(Server *server, const Client *client, const std::string &k
 	return (true);
 }
 
-bool Channel::removeUser(const Client *client) {
+bool	Channel::removeUser(const Client *client) {
 	// Check if user in on channel
 	if (!this->isUserOnChannel(client))
 			return (false);
@@ -117,4 +117,16 @@ bool Channel::removeUser(const Client *client) {
 			this->_operators.insert(std::make_pair(this->_users.begin()->first, this->_users.begin()->second));
 	}
 	return (this->_users.empty());
+}
+
+// If client is null -> send to everyone
+// Otherwise -> send to everyone except client (author)
+// msg must be formatted
+void	Channel::broadcast(const std::string &msg, const Client *sender, Server *server) {
+	std::map<int, const Client*>::const_iterator it;
+	for (it = this->_users.begin(); it != this->_users.end(); ++it) {
+		if (sender == NULL || it->first != sender->getFd()) {
+			server->sendToClient(it->first, msg);
+		}
+	}
 }
