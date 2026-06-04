@@ -3,7 +3,7 @@
 // Orthodox Canonical Form
 // Never called
 Channel::Channel() :
-	_name(""),
+	_name("#default"),
 	_topic(""),
 	_isInviteOnly(false),
 	_isProtectedTopic(false),
