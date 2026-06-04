@@ -1,5 +1,5 @@
-/*  Deconnexion propre
-	QUIT :bye
+/*  The QUIT command is used to terminate a client’s connection to the server. 
+	The server acknowledges this by replying with an ERROR message and closing the connection to the client.
 */
 
 #include "commands/Quit.hpp"
