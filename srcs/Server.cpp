@@ -194,6 +194,8 @@ void	Server::receiveFromClient(int fd)
 			continue;
 		Command	_newCommand;
 		_newCommand.processLine(complete_command, *this, _clients[fd]);
+		if (!ClientExists(fd))
+			return;
 		if (tryRegistration(_clients[fd]) == true) {
 			sendToClient(fd, RPL_WELCOME(_clients[fd].getNickname(), _clients[fd].getUsername(), "localhost"));
 			sendToClient(fd, RPL_YOURHOST(_clients[fd].getNickname()));
@@ -323,6 +325,19 @@ Client* Server::findClient(const std::string &Nickname)
 		it++;
 	}
 	return (NULL); 
+}
+
+bool Server::ClientExists(int fd)
+{
+	std::map<int, Client>::iterator it = _clients.begin();
+
+	while (it != _clients.end())
+	{
+		if (fd == it->second.getFd())
+			return (true);
+		it++;
+	}
+	return (false); 
 }
 
 Channel		*Server::findChannel(const std::string &name) {

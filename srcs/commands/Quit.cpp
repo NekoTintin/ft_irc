@@ -37,9 +37,13 @@
 
 bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client)
 {
-	(void)Token;
-	(void)server;
-	(void)client;
 	std::cout << "HANDLE QUIT" << std::endl;
+	std::string Errormessage = "ERROR :Quit ";
+	if (Token.size() >= 2 && !Token[1].empty())
+		Errormessage += Token[1];
+	else
+		Errormessage += "Client Quit";
+	server.sendToClient(client.getFd(), Errormessage);
+	server.removeClient(client.getFd());
 	return (true);
 }

@@ -47,12 +47,13 @@ class Server {
 
 		bool		sendToClient(int fd, const std::string &message);
 
-		Client*			findClient(const std::string &Nickname);
+		Client*		findClient(const std::string &Nickname);
+		bool	 	ClientExists(int fd);
 
 		// Channels func
-		Channel*		findChannel(const std::string &name);
-		bool			createChannel(const std::string &name);
-		bool			removeChannel(const std::string &name);
+		Channel*	findChannel(const std::string &name);
+		bool		createChannel(const std::string &name);
+		bool		removeChannel(const std::string &name);
 
 		// Signal
 		static void	signalHandler(int sig);
