@@ -69,7 +69,7 @@ int Command::commandType(int i)
 	return (type);
 }
 
-bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, Channel &channel)
+bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client)
 {
 	switch (i)
 	{
@@ -86,7 +86,7 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
 		case 10: return (handlePong(Token, server, client));
 		case 11: return (handlePrivmsg(Token, server, client));
 		case 12: return (handleQuit(Token, server, client));
-		case 13: return (handleTopic(Token, server, client, channel));
+		case 13: return (handleTopic(Token, server, client));
 		case 14: return (handleUser(Token, server, client));
 		case 15: return (false);
 	}
@@ -131,7 +131,7 @@ std::vector<std::string> Command::Tokenize(std::string line)
 	return (token);
 }
 
-int Command::processLine(std::string line, Server &server, Client &client, Channel &channel)
+int Command::processLine(std::string line, Server &server, Client &client)
 {
 	if (line.empty() && line[line.length() - 1] != '\n')
 		return (ERROR);
@@ -151,7 +151,7 @@ int Command::processLine(std::string line, Server &server, Client &client, Chann
 		_args.push_back(token[i]);
 
 	int command_index = findCommandIndex(_command);
-	selectHandler(commandType(command_index), token, server, client, channel);
+	selectHandler(commandType(command_index), token, server, client);
 
 	return (0);
 }

@@ -57,7 +57,9 @@ class Server {
 
 		// Infos de chaque client, accessibles par son fd.
 		// Clients[5] contient le Client associe au fd=5.
-		std::map<int, Client>	_clients;				
+		std::map<int, Client>	_clients;
+
+		// 
 		
 };
 
