@@ -31,6 +31,7 @@ bool Command::isaCommand(std::string tocheck)
 	}
 	return (false);
 }
+
 int Command::findCommandIndex(std::string _command)
 {
 	size_t i = 0; 
@@ -94,11 +95,11 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
 
 std::vector<std::string> Command::Tokenize(std::string line)
 {
-	size_t                      i = 0;
-	size_t                      j = 0;
-	size_t                      begin_word = 0;
-	std::string                 temp_str;
-	std::vector<std::string>    token;
+	size_t						i = 0;
+	size_t						j = 0;
+	size_t						begin_word = 0;
+	std::string					temp_str;
+	std::vector<std::string>	token;
 
 	while (i < line.size())
 	{
@@ -140,7 +141,7 @@ int Command::processLine(std::string line, Server &server, Client &client)
 	_command.clear();
 	_args.clear();
 
-	std::vector<std::string>    token = Tokenize(line);
+	std::vector<std::string>	token = Tokenize(line);
 	if (token.empty())
 		return (ERROR);
 	if (!isaCommand(token[0]))
