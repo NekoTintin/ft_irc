@@ -4,7 +4,7 @@ bool nonalphanumchar(char c)
 {
 	std::string allowedchar;
 
-	allowedchar = "_-[]\\`^{}";
+	allowedchar = "_-[]\\|`^{}";
 	for (size_t i = 0; i < allowedchar.size(); i++)
 	{
 		if (allowedchar[i] == c)

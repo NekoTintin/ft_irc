@@ -309,3 +309,16 @@ bool Server::NicknameExists(std::string nickname)
 	}
 	return (false);
 }
+
+Client* Server::findClient(const std::string &Nickname)
+{
+	std::map<int, Client>::iterator it = _clients.begin();
+
+	while (it != _clients.end())
+	{
+		if (Nickname == it->second.getNickname())
+			return (&it->second);
+		it++;
+	}
+	return (NULL); 
+}

@@ -1,5 +1,3 @@
-// Permet de donner le mot de passe du serveur
-
 #include "commands/Pass.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
@@ -20,20 +18,8 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client)
 		return (false);
 	}
 	if (Token[1] != server.getPassword())
-	{
-		//server.sendToClient(client.getFd(), formatMessage(ERR_PASSWDMISMATCH, client, channel));
 		return (false);
-	}
-
 	client.setCorrectPassword();
 	std::cout << "Correct Password" << std::endl;
 	return (true);
 }
-
-/*
-A envoyer dans terminal du client pour tester :
-
-nc --crlf 127.0.0.1 6667
-
-printf "PASS pass\r\n" | nc 127.0.0.1 6667
-*/
