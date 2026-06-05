@@ -17,7 +17,7 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 	if (!client.getRegistration())
 	{
 		server.sendToClient(client.getFd(), ERR_NOTREGISTERED(client.getNickname()));
-		std::cerr << "Wrong - Client is not registered" << std::endl;
+		std::cerr << "INVITE HANDLER - Client is not registered" << std::endl;
 		return (false);
 	}
 	return (true);

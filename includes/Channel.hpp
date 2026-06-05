@@ -50,7 +50,7 @@ class Channel {
 		bool			_isInviteOnly;
 		bool			_isProtectedTopic;
 		std::string		_channelKey;
-		std::size_t		_userLimit;
+		std::size_t		_userLimit; // Don't forget that 0 is unlimited
 };
 
 # endif

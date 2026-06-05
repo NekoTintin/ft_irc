@@ -25,7 +25,7 @@ bool handlePing(std::vector<std::string> &Token, Server &server, Client &client,
 }
 
 bool handlePong(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing){
-	(void) server;
+	(void)server;
 	std::cout << "HANDLE PONG" << std::endl;
 	if ((Token.size() >= 2 && !Token[1].empty()) || _hasTrailing == true)
 	{

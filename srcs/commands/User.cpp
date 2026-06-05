@@ -37,13 +37,13 @@ bool handleUser(std::vector<std::string> &token, Server &server, Client &client)
 	if (client.getRegistration())
 	{
 		server.sendToClient(client.getFd(), ERR_ALREADYREGISTRED(client.getNickname()));
-		std::cerr << "Wrong - already registered" << std::endl;
+		std::cerr << "USER HANDLER - already registered" << std::endl;
 		return (false);		
 	}
 	if (token.size() != 5 || token[2] != "0" || token[3] != "*" || token[1].empty() || token[4].empty()
 		|| correctname(token[1]) == false) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
-		std::cerr << "Wrong arguments" << std::endl;
+		std::cerr << "USER HANDLER - Wrong arguments" << std::endl;
 		return (false);
 	}
 	client.setUsername(token[1]);

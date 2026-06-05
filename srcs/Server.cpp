@@ -112,22 +112,19 @@ void	Server::removeClient(int fd)
 	}
 }
 
-void	Server::acceptNewClient()
-{
+void	Server::acceptNewClient() {
 	struct sockaddr_in	_clientaddr;
 	socklen_t			addr_size = sizeof(_clientaddr);
 
 	int clientFD = accept(_socketFD, (struct sockaddr*)&_clientaddr, &addr_size);
 
-	if (clientFD < 0)
-	{
-		std::cerr << "New client - Accept error" << std::endl;
+	if (clientFD < 0) {
+		std::cerr << "Error: Failed to accept new client." << std::endl;
 		return;
 	}
 
-	if (fcntl(clientFD, F_SETFL, O_NONBLOCK) < 0)
-	{
-		std::cerr << "New client - fcntl error" << std::endl;
+	if (fcntl(clientFD, F_SETFL, O_NONBLOCK) < 0) {
+		std::cerr << "Error: Failed to set client socket to non-blocking mode." << std::endl;
 		close(clientFD);
 		return;
 	}
@@ -171,7 +168,7 @@ void	Server::receiveFromClient(int fd)
 	// Check for errors and disconnections
 	if (bytesRecv < 0)
 	{
-		std::cerr << "Error with message from client" << std::endl;
+		std::cerr << "Error: Failed to receive message from client fd " << fd << "." << std::endl;
 		removeClient(fd);
 		return;
 	}
@@ -255,13 +252,13 @@ void	Server::runServerLoop()
 		{
 			if (!g_running)
 				break;
-			std::cerr << "Poll Error" << std::endl;
+			std::cerr << "Error: Poll Error" << std::endl;
 			break;
 		}
 
 		if (ready == 0)
 		{
-			std::cerr << "Time out" << std::endl;
+			std::cerr << "Error: Time out" << std::endl;
 			break;
 		}
 

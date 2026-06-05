@@ -14,19 +14,19 @@ bool handleNick(std::vector<std::string> &token, Server &server, Client &client,
 	std::cout << "HANDLE NICK" << std::endl;
 	if (token.size() != 2)
 	{
-		std::cerr << "Wrong number of arguments" << std::endl;
+		std::cerr << "NICK HANDLER - Invalid number of arguments" << std::endl;
 		server.sendToClient(client.getFd(), ERR_NONICKNAMEGIVEN(client.getNickname()));
 		return (false);
 	}
 	if (correctnamenickname(token[1]) == false || _hasTrailing == true)
 	{
-		std::cerr << "Incorrect Nickname" << std::endl;
+		std::cerr << "NICK HANDLER - Invalid Nickname" << std::endl;
 		server.sendToClient(client.getFd(), ERR_ERRONEUSNICKNAME(client.getNickname(), token[1]));
 		return (false);
 	}
 	if (server.NicknameExists(token[1]) == true)
 	{
-		std::cerr << "Nickname is already used by another user" << std::endl;
+		std::cerr << "NICK HANDLER - Nickname is already taken by another user" << std::endl;
 		server.sendToClient(client.getFd(), ERR_NICKNAMEINUSE(client.getNickname(), token[1]));
 		return (false);
 	}
