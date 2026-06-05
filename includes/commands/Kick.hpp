@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handleKick(std::vector<std::string> &Token, Server &server, Client &client);
+bool	handleKick(std::vector<std::string> &Token, Server &server, Client &client);
 
 #endif

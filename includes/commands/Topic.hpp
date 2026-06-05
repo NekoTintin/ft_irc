@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handleTopic(std::vector<std::string> &Token, Server &server, Client &client);
+bool	handleTopic(std::vector<std::string> &Token, Server &server, Client &client);
 
 #endif

@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client);
+bool	handleQuit(std::vector<std::string> &Token, Server &server, Client &client);
 
 #endif

@@ -1,13 +1,13 @@
 #ifndef JOIN_HPP
 # define JOIN_HPP
 
-#include <iostream>
+# include <iostream>
 # include <vector>
 # include "Reply.hpp"
 
 class Server;
 class Client;
 
-bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
+bool	handleJoin(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
 
 #endif

@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &client);
+bool	handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &client);
 
 #endif

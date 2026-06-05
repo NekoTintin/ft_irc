@@ -9,6 +9,6 @@
 class Server;
 class Client;
 
-bool handleUser(std::vector<std::string> &token, Server &server, Client &client);
+bool	handleUser(std::vector<std::string> &token, Server &server, Client &client);
 
 #endif

@@ -8,6 +8,6 @@
 class Server;
 class Client;
 
-bool handleCap(std::vector<std::string> &Token, Server &server, Client &client);
+bool	handleCap(std::vector<std::string> &Token, Server &server, Client &client);
 
 #endif

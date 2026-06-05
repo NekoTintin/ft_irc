@@ -1,26 +1,25 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-#include <iostream>
-#include <string>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <cstring>
-#include <fcntl.h>
-#include <vector>
-#include <map>
-#include <poll.h>
-#include <cstdlib>
-#include <csignal>
-#include <iterator>
-
-#include "Client.hpp"
-#include "Command.hpp"
-#include "Channel.hpp"
-#include "Utils.hpp"
-#include "Reply.hpp"
+# include <iostream>
+# include <string>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <sys/socket.h>
+# include <unistd.h>
+# include <cstring>
+# include <fcntl.h>
+# include <vector>
+# include <map>
+# include <poll.h>
+# include <cstdlib>
+# include <csignal>
+# include <iterator>
+# include "Client.hpp"
+# include "Command.hpp"
+# include "Channel.hpp"
+# include "Utils.hpp"
+# include "Reply.hpp"
 
 extern bool g_running;
 
@@ -33,7 +32,7 @@ class Server {
 		// Funcs
 		bool		checkParsing(int argc, char **argv);
 		bool		socketSetup();
-		void		addServertoPoll(); //ajoute le server a pollfds
+		void		addServertoPoll();
 		void		runServerLoop();
 
 		void		removeClient(int fd);
@@ -64,11 +63,10 @@ class Server {
 		int						_socketFD;
 		struct sockaddr_in		_serverAddr;
 
-		// Liste des fds surveilles par poll()
+		// List of file descriptors to monitor with poll
 		std::vector<pollfd>		_pollfds;
 
-		// Infos de chaque client, accessibles par son fd.
-		// Clients[5] contient le Client associe au fd=5.
+		// List of clients, mapped by their file descriptor
 		std::map<int, Client>	_clients;
 
 		// List of channels

@@ -3,51 +3,57 @@
 
 # define NB_CHARS 512
 
-#include <iostream>
-#include <string>
+# include <iostream>
+# include <string>
 
 class Client {
-    public:
+	public:
+		// Constructors and Destructor
 		Client();
-    Client(int new_socket);
+		Client(int new_socket);
 		~Client();
 
-    int         getFd() const;
-    void        addToBuffer(const std::string &data);
-    bool        isComplete();
-    std::string getCommand();
-    void        removeCommand();
+		// FDs and Buffer
+		int						getFd() const;
+		void					addToBuffer(const std::string &data);
+		bool					isComplete();
+		std::string				getCommand();
+		void					removeCommand();
 
-    bool        getCorrectPassword();
-    void        setCorrectPassword();
+		// Password and Registration
+		bool					getCorrectPassword();
+		void					setCorrectPassword();
 
-    bool        getRegistration();
-    void        setRegistration();
+		// Registration status
+		bool					getRegistration();
+		void					setRegistration();
 
-    const std::string &getNickname() const;
-    void        setNickname(std::string nickame);
-    bool        getNicknamestatus();
+		// Nickname
+		const std::string		&getNickname() const;
+		void					setNickname(std::string nickame);
+		bool					getNicknamestatus();
 
-    const std::string &getUsername() const;
-    void        setUsername(std::string username);
-    bool        getUsernamestatus();
-  
-    std::string getRealname();
-    void        setRealname(std::string realname);
-    bool        getRealnamestatus();
+		// Username
+		const std::string		&getUsername() const;
+		void					setUsername(std::string username);
+		bool					getUsernamestatus();
 
-    private:
-        int          _fd;
-        std::string _buffer;
-        bool        _registration;
-        bool        _correctPassword;
-        std::string _nickname;
-        bool        _nicknameset;
-        std::string _username;
-        bool        _usernameset;
-        std::string _realname;
-        bool        _realnameset;
+		// Realname
+		std::string				getRealname();
+		void					setRealname(std::string realname);
+		bool					getRealnamestatus();
 
+	private:
+		int						_fd;
+		std::string				_buffer;
+		bool					_registration;
+		bool					_correctPassword;
+		std::string				_nickname;
+		bool					_nicknameset;
+		std::string				_username;
+		bool					_usernameset;
+		std::string				_realname;
+		bool					_realnameset;
 };
 
 #endif

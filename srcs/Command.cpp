@@ -20,7 +20,7 @@ Command::Command()
 
 Command::~Command() {};
 
-bool Command::isaCommand(std::string tocheck)
+bool Command::isCommand(std::string tocheck)
 {
 	size_t i = 0;
 	while (i < _standardCommands.size())
@@ -147,7 +147,7 @@ int Command::processLine(std::string line, Server &server, Client &client)
 	std::vector<std::string>	token = Tokenize(line, &_hasTrailing);
 	if (token.empty())
 		return (ERROR);
-	if (!isaCommand(token[0]))
+	if (!isCommand(token[0]))
 		return (ERROR);
 	_command = token[0];
 	for (size_t i = 1; i < token.size(); i++)

@@ -1,6 +1,7 @@
-#pragma once
+#ifndef REPLY_HPP
+# define REPLY_HPP
 
-#include <string>
+# include <string>
 
 // 1. Welcome Messages
 #define RPL_WELCOME(nick, user, host) (std::string(":localhost 001 ") + nick + " :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host)
@@ -43,3 +44,5 @@
 #define ERR_NOTEXTTOSEND() (std::string(":localhost 412 ") + ":No text to send")
 #define RPL_TEXTTOSEND(sender_nick, user, nick, messagetext) (std::string(":" + sender_nick + "!" + user + "@localhost ") + "PRIVMSG " + nick + " :" + messagetext)
 #define ERR_NOORIGIN() (std::string(":localhost 409 ") + ":No origin specified")
+
+#endif
