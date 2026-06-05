@@ -12,6 +12,13 @@
 bool handleTopic(std::vector<std::string> &Token, Server &server, Client &client)
 {
 	std::cout << "HANDLE TOPIC" << std::endl;
+	//Client not registered
+	if (!client.getRegistration())
+	{
+		server.sendToClient(client.getFd(), ERR_NOTREGISTERED(client.getNickname()));
+		std::cerr << "Wrong - Client is not registered" << std::endl;
+		return (false);
+	}
 	// Not enough args
 	if (Token.size() < 2) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), Token[1]));

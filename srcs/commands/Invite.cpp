@@ -12,9 +12,13 @@
 bool handleInvite(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing)
 {
 	(void)Token;
-	(void)server;
-	(void)client;
 	(void)_hasTrailing;
 	std::cout << "HANDLE INVITE" << std::endl;
+	if (!client.getRegistration())
+	{
+		server.sendToClient(client.getFd(), ERR_NOTREGISTERED(client.getNickname()));
+		std::cerr << "Wrong - Client is not registered" << std::endl;
+		return (false);
+	}
 	return (true);
 }

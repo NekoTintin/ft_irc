@@ -19,9 +19,13 @@ l : set/remove limite utilisateurs
 bool handleMode(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing)
 {
 	(void)Token;
-	(void)server;
-	(void)client;
 	(void) _hasTrailing;
 	std::cout << "HANDLE MODE" << std::endl;
+	if (!client.getRegistration())
+	{
+		server.sendToClient(client.getFd(), ERR_NOTREGISTERED(client.getNickname()));
+		std::cerr << "Wrong - Client is not registered" << std::endl;
+		return (false);
+	}
 	return (true);
 }

@@ -329,7 +329,7 @@ sauf éventuellement l’émetteur.
 -> Objectif :
 distribuer les messages IRC.
 
-14.Implémenter QUIT
+14.Implémenter QUIT---------------------> OK MAIS GERER LA SORTIE DU CHANNEL
 Broadcast du départ.
 Retirer le client :
 des channels,
@@ -347,7 +347,7 @@ Sinon timeout.
 -> Objectif :
 vérifier qu’un client est toujours vivant.
 
-16.Gérer les erreurs IRC
+16.Gérer les erreurs IRC --------> OK FAIT AU FUR ET A MESURE
 Nickname déjà utilisé.
 Pas enregistré.
 Channel inexistant.
