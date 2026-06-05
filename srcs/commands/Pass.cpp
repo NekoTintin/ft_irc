@@ -3,8 +3,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handlePass(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing)
-{
+bool handlePass(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
 	std::cout << "HANDLE PASS" << std::endl;
 	if (client.getRegistration() == true)
 	{
@@ -13,13 +12,17 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client,
 	}
 	if (Token.size() != 2 || _hasTrailing == true)
 	{
-		std::string username = client.getNickname().empty() ? "*" : client.getNickname();
+		std::string username;
+		if (client.getNickname().empty())
+			username = "*";
+		else
+			username = client.getNickname();
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(username, "PASS"));
 		return (false);
 	}
 	if (Token[1] != server.getPassword())
 		return (false);
 	client.setCorrectPassword();
-	std::cout << "Correct Password" << std::endl;
+	std::cout << "INFO: Correct Password for client " << client.getFd() << std::endl;
 	return (true);
 }

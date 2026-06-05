@@ -8,8 +8,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handleKick(std::vector<std::string> &Token, Server &server, Client &client)
-{
+bool handleKick(std::vector<std::string> &Token, Server &server, Client &client) {
 	(void)Token;
 	std::cout << "HANDLE KICK" << std::endl;
 	if (!client.getRegistration())

@@ -3,8 +3,7 @@
 #include "../includes/Channel.hpp"
 #include "../includes/Command.hpp"
 
-int	main(int argc, char **argv)
-{
+int	main(int argc, char **argv) {
 	Server server;
 
 	if (!server.checkParsing(argc, argv))
@@ -19,7 +18,6 @@ int	main(int argc, char **argv)
 }
 
 /* Pour tester :
-
 Terminal 1 : valgrind --track-fds=yes ./ircserv 6667 pass
 Autres Terminal : nc --crlf 127.0.0.1 6667
 Check de la commande : printf "Hello\r\n" | nc 127.0.0.1 6667

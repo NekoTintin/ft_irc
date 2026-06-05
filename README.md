@@ -1,21 +1,25 @@
 _This project has been created as part of the 42 curriculum by mlelu, qupollet, tmalkawi._
 
-## ft_irc
+# ft_irc
 
 Recreate a IRC Internet Relay Chat, a text based chat protocol.
 
-Server : 
-   - receives the connexion requests from several clients
+Server:
+	- Receives the connexion requests from several clients
 
-Clients : 
-   - each client is a user with a nickname
-   - all the clients are stored in a Map which as an attribute of the Server
+Clients:
+	- Each client is a user with a nickname
+	- All the clients are stored in a Map which as an attribute of the Server
 
-How to start :
-   - Make
-   - Open a terminal and ./ircserv 6667 pass
-   - Arg 1 = port
-   - Arg 2 = password of the server
+How to start:
+```bash
+make
+./ircserv <port> <password>
+```
+Start Irssi :
+```bash
+irssi -c localhost -p 6667 -w <password> -n <nickname>
+```
 
 Need to be careful about open FDs and make sure that they are all properly closed
 
@@ -23,36 +27,36 @@ Need to be careful about open FDs and make sure that they are all properly close
 ## Sources
 
 - Poll():
-   - https://bousk.developpez.com/cours/reseau-c++/TCP/05-envoi-reception-serveur/
-   - https://www.ibm.com/docs/fr/i/7.5.0?topic=designs-using-poll-instead-select
+	- https://bousk.developpez.com/cours/reseau-c++/TCP/05-envoi-reception-serveur/
+	- https://www.ibm.com/docs/fr/i/7.5.0?topic=designs-using-poll-instead-select
 
 - Send():
-   - https://pubs.opengroup.org/onlinepubs/009696599/functions/send.html
-   - https://linux.die.net/man/2/send
-   - https://www.geeksforgeeks.org/cpp/socket-programming-in-cpp/
-    
+	- https://pubs.opengroup.org/onlinepubs/009696599/functions/send.html
+	- https://linux.die.net/man/2/send
+	- https://www.geeksforgeeks.org/cpp/socket-programming-in-cpp/
+	 
 - Sockets:
-   - https://youtu.be/gntyAFoZp-E?si=g4ap0MMGicZ-UDn7
+	- https://youtu.be/gntyAFoZp-E?si=g4ap0MMGicZ-UDn7
 
 - Recve():
-   - https://pubs.opengroup.org/onlinepubs/007904975/functions/recv.html
-   - https://www.ibm.com/docs/en/
+	- https://pubs.opengroup.org/onlinepubs/007904975/functions/recv.html
+	- https://www.ibm.com/docs/en/
 
 - Signal :
-   - https://www.geeksforgeeks.org/cpp/signal-handling-in-cpp/
+	- https://www.geeksforgeeks.org/cpp/signal-handling-in-cpp/
 
 - Project overview :
-   - https://nathaan.me/projects/irc
-   - https://modern.ircdocs.horse/
-   - https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=connexion
+	- https://nathaan.me/projects/irc
+	- https://modern.ircdocs.horse/
+	- https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=connexion
 
 - IRC Commands :
-   - https://fr.wikipedia.org/wiki/Aide:IRC/commandes
-   - https://dd.ircdocs.horse/refs/commands/user
-   - https://www.alien.net.au/irc/irc2numerics.html
+	- https://fr.wikipedia.org/wiki/Aide:IRC/commandes
+	- https://dd.ircdocs.horse/refs/commands/user
+	- https://www.alien.net.au/irc/irc2numerics.html
 
 - IRSSI :
-   - https://doc.fedora-fr.org/wiki/Irssi_-_client_IRC_en_mode_console
+	- https://doc.fedora-fr.org/wiki/Irssi_-_client_IRC_en_mode_console
 
 
 ----------------------------------------------------------------------------
@@ -76,67 +80,67 @@ Membre B → IRC logique métier
 Details :
 
 1.Sécuriser l’arrêt du serveur ----> ok
-   Remplacer while (1) par while (_running). 
-   Gérer SIGINT.
-   Fermer proprement tous les fd.
-   Objectif : plus d’arrêt brutal sous Valgrind.
+	Remplacer while (1) par while (_running). 
+	Gérer SIGINT.
+	Fermer proprement tous les fd.
+	Objectif : plus d’arrêt brutal sous Valgrind.
 
 2.Finaliser removeClient(fd) ----> ok
-   close(fd)
-   supprimer le fd de _pollfds
-   supprimer le client de _clients
-   tester les déconnexions avec plusieurs nc.
+	close(fd)
+	supprimer le fd de _pollfds
+	supprimer le client de _clients
+	tester les déconnexions avec plusieurs nc.
 
 3.Améliorer receiveFromClient(fd) -----> ok
-   recv()
-   si recv == 0 → déconnexion
-   si recv > 0 → ajouter au buffer du Client
-   ne plus seulement afficher le message.
+	recv()
+	si recv == 0 → déconnexion
+	si recv > 0 → ajouter au buffer du Client
+	ne plus seulement afficher le message.
 
 4.Gérer les buffers TCP
-   Chaque client doit avoir son propre std::string _buffer. ---> ok
-   Accumuler les morceaux reçus. -----> ok
-   Chercher \r\n. ------> ok
-   Extraire une commande complète. -----> ok
-   Garder le reste du buffer s’il y a une commande incomplète. -----> ok
-   Créer une fonction de traitement des lignes ---------> ok
-   Quand une ligne complète est trouvée :
-   l’extraire du buffer, ----------------> ok
-   l’envoyer au futur parser, TO DONE -> NO PARSER YET
-   pour l’instant juste l’afficher proprement.
-   Tester les messages fragmentés ----------> ok
-   Avec nc -C.
-   Tester le cas du sujet :
-   com^Dman^Dd
-   Objectif : reconstruire correctement une commande reçue en plusieurs morceaux.
+	Chaque client doit avoir son propre std::string _buffer. ---> ok
+	Accumuler les morceaux reçus. -----> ok
+	Chercher \r\n. ------> ok
+	Extraire une commande complète. -----> ok
+	Garder le reste du buffer s’il y a une commande incomplète. -----> ok
+	Créer une fonction de traitement des lignes ---------> ok
+	Quand une ligne complète est trouvée :
+	l’extraire du buffer, ----------------> ok
+	l’envoyer au futur parser, TO DONE -> NO PARSER YET
+	pour l’instant juste l’afficher proprement.
+	Tester les messages fragmentés ----------> ok
+	Avec nc -C.
+	Tester le cas du sujet :
+	com^Dman^Dd
+	Objectif : reconstruire correctement une commande reçue en plusieurs morceaux.
 
 5.Préparer l’interface avec le membre B
-   Ta partie doit pouvoir fournir :
-   fd client + ligne IRC complète
-   Son parser/command handler traitera ensuite :
-   PASS, NICK, USER, JOIN, etc.
+	Ta partie doit pouvoir fournir :
+	fd client + ligne IRC complète
+	Son parser/command handler traitera ensuite :
+	PASS, NICK, USER, JOIN, etc.
 
 6.Ajouter une file d’envoi plus tard
-   Ne pas forcément faire send() directement partout.
-   Prévoir un buffer d’écriture par client.
-   Plus tard : surveiller POLLOUT si besoin.
+	Ne pas forcément faire send() directement partout.
+	Prévoir un buffer d’écriture par client.
+	Plus tard : surveiller POLLOUT si besoin.
 
 7.Tests à faire maintenant
-   1 client se connecte.
-   2 clients se connectent.
-   Un client envoie un message.
-   Deux clients envoient en même temps.
-   Un client quitte.
-   Plusieurs clients quittent.
-   Valgrind avec --track-fds=yes.
+	1 client se connecte.
+	2 clients se connectent.
+	Un client envoie un message.
+	Deux clients envoient en même temps.
+	Un client quitte.
+	Plusieurs clients quittent.
+	Valgrind avec --track-fds=yes.
 
 Objectif final de ta partie
-   Serveur non bloquant stable.
-   Multiples clients.
-   Buffers par client.
-   Commandes IRC complètes reconstruites.
-   Déconnexions propres.
-   Aucun crash.
+	Serveur non bloquant stable.
+	Multiples clients.
+	Buffers par client.
+	Commandes IRC complètes reconstruites.
+	Déconnexions propres.
+	Aucun crash.
 
 Responsable :
 

@@ -9,8 +9,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handleInvite(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing)
-{
+bool handleInvite(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
 	(void)Token;
 	(void)_hasTrailing;
 	std::cout << "HANDLE INVITE" << std::endl;

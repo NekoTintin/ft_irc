@@ -1,26 +1,22 @@
 #include "Utils.hpp"
 
-bool nonalphanumchar(char c)
-{
+bool nonalphanumchar(char c) {
 	std::string allowedchar;
 
 	allowedchar = "_-[]\\|`^{}";
-	for (size_t i = 0; i < allowedchar.size(); i++)
-	{
+	for (size_t i = 0; i < allowedchar.size(); i++) {
 		if (allowedchar[i] == c)
 			return (true);
 	}
 	return (false);
 }
 
-bool correctnamenickname(std::string nametocheck)
-{
+bool correctnamenickname(std::string nametocheck) {
 
 	if (!isalpha(nametocheck[0]))
 		return (false);
 	size_t i = 0;
-	while (i < nametocheck.size())
-	{
+	while (i < nametocheck.size()) {
 		if (!isalnum(nametocheck[i]) 
 			&& nonalphanumchar(nametocheck[i]) == false)
 				return (false);
@@ -29,12 +25,9 @@ bool correctnamenickname(std::string nametocheck)
 	return (true);
 }
 
-bool correctname(std::string nametocheck)
-{
-
+bool correctname(std::string nametocheck) {
 	size_t i = 0;
-	while (i < nametocheck.size())
-	{
+	while (i < nametocheck.size()) {
 		if (!isalnum(nametocheck[i]) 
 			&& nonalphanumchar(nametocheck[i]) == false)
 				return (false);
@@ -44,11 +37,11 @@ bool correctname(std::string nametocheck)
 }
 
 std::string getDate() {
-    std::time_t now = std::time(NULL);
-    std::tm* localTime = std::localtime(&now);
+	std::time_t now = std::time(NULL);
+	std::tm* localTime = std::localtime(&now);
 
-    char buf[80];
-    std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localTime);
-    
-    return std::string(buf);
+	char buf[80];
+	std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localTime);
+	
+	return std::string(buf);
 }

@@ -9,8 +9,7 @@
 #include "Channel.hpp"
 
 // Args -> a[0] = TOPIC | a[1] = #42 | a[2] = Bienvenue
-bool handleTopic(std::vector<std::string> &Token, Server &server, Client &client)
-{
+bool handleTopic(std::vector<std::string> &Token, Server &server, Client &client) {
 	std::cout << "HANDLE TOPIC" << std::endl;
 	//Client not registered
 	if (!client.getRegistration())
@@ -51,7 +50,7 @@ bool handleTopic(std::vector<std::string> &Token, Server &server, Client &client
 			return (false);
 		}
 	}
-	toExist->setTopic(Token[3]);
+	toExist->setTopic(Token[2]);
 	// Broadcast to everyone
 	std::string msg = ":" + client.getNickname() + " TOPIC " + toExist->getName() + " :" + toExist->getTopic();
 	toExist->broadcast(msg, NULL, &server);

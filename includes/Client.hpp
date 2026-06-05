@@ -20,7 +20,7 @@ class Client {
 		std::string				getCommand();
 		void					removeCommand();
 
-		// Password and Registration
+		// Password
 		bool					getCorrectPassword();
 		void					setCorrectPassword();
 

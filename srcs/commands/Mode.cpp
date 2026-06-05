@@ -16,8 +16,7 @@ l : set/remove limite utilisateurs
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handleMode(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing)
-{
+bool handleMode(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
 	(void)Token;
 	(void) _hasTrailing;
 	std::cout << "HANDLE MODE" << std::endl;

@@ -1,7 +1,6 @@
 #include "Command.hpp"
 
-Command::Command()
-{
+Command::Command() {
 	_standardCommands.push_back("CAP");
 	_standardCommands.push_back("INVITE");
 	_standardCommands.push_back("JOIN");
@@ -20,8 +19,7 @@ Command::Command()
 
 Command::~Command() {};
 
-bool Command::isCommand(std::string tocheck)
-{
+bool Command::isCommand(std::string tocheck) {
 	size_t i = 0;
 	while (i < _standardCommands.size())
 	{
@@ -32,8 +30,7 @@ bool Command::isCommand(std::string tocheck)
 	return (false);
 }
 
-int Command::findCommandIndex(std::string _command)
-{
+int Command::findCommandIndex(std::string _command) {
 	size_t i = 0; 
 
 	while (i < _standardCommands.size())
@@ -45,8 +42,7 @@ int Command::findCommandIndex(std::string _command)
 	return (0);
 }
 
-int Command::commandType(int i)
-{
+int Command::commandType(int i) {
 	int type = 0;
 	switch (i)
 	{
@@ -69,8 +65,7 @@ int Command::commandType(int i)
 	return (type);
 }
 
-bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, bool _hasTrailing)
-{
+bool Command::selectHandler(int i, std::vector<std::string> Token, Server &server, Client &client, bool _hasTrailing) {
 	switch (i)
 	{
 		case 0: return (false);
@@ -93,8 +88,7 @@ bool Command::selectHandler(int i, std::vector<std::string> Token, Server &serve
 	return (true);
 }
 
-std::vector<std::string> Command::Tokenize(std::string line, bool *_hasTrailing)
-{
+std::vector<std::string> Command::Tokenize(std::string line, bool *_hasTrailing) {
 	size_t						i = 0;
 	size_t						j = 0;
 	size_t						begin_word = 0;
@@ -132,8 +126,7 @@ std::vector<std::string> Command::Tokenize(std::string line, bool *_hasTrailing)
 	return (token);
 }
 
-int Command::processLine(std::string line, Server &server, Client &client)
-{
+int Command::processLine(std::string line, Server &server, Client &client) {
 	if (line.empty() && line[line.length() - 1] != '\n')
 		return (ERROR);
 	if (line.empty() && line[line.length() - 1] != '\r')

@@ -35,8 +35,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client)
-{
+bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client) {
 	std::cout << "HANDLE QUIT" << std::endl;
 	std::string Errormessage = "ERROR :Quit ";
 	if (Token.size() >= 2 && !Token[1].empty())

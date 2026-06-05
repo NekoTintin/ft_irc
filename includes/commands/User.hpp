@@ -9,6 +9,7 @@
 class Server;
 class Client;
 
+// USER cannot be used after registration
 bool	handleUser(std::vector<std::string> &token, Server &server, Client &client);
 
 #endif

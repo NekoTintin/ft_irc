@@ -40,14 +40,14 @@ bool handleUser(std::vector<std::string> &token, Server &server, Client &client)
 		std::cerr << "USER HANDLER - already registered" << std::endl;
 		return (false);		
 	}
-	if (token.size() != 5 || token[2] != "0" || token[3] != "*" || token[1].empty() || token[4].empty()
+	if (token.size() != 5 || token[1].empty() || token[4].empty()
 		|| correctname(token[1]) == false) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
-		std::cerr << "USER HANDLER - Wrong arguments" << std::endl;
+		std::cerr << "USER HANDLER - Invalid arguments" << std::endl;
 		return (false);
 	}
 	client.setUsername(token[1]);
 	client.setRealname(token[4]);
-	std::cout << "Username and Realname set" << std::endl;
+	std::cout << "INFO: Username and Realname set for client " << client.getFd() << std::endl;
 	return (true);
 }

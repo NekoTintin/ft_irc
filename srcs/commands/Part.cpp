@@ -1,12 +1,11 @@
-//Quitter le channel
+// Quitter le channel
 
 #include "commands/Part.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 
-bool handlePart(std::vector<std::string> &Token, Server &server, Client &client)
-{
+bool handlePart(std::vector<std::string> &Token, Server &server, Client &client) {
 	(void)Token;
 	std::cout << "HANDLE PART" << std::endl;
 	if (!client.getRegistration())
