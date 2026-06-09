@@ -34,16 +34,21 @@
 bool handleUser(std::vector<std::string> &token, Server &server, Client &client) {
 	(void)server;
 	std::cout << "HANDLE USER" << std::endl;
-	if (client.getRegistration())
-	{
+	if (client.getRegistration()) {
 		server.sendToClient(client.getFd(), ERR_ALREADYREGISTRED(client.getNickname()));
 		std::cerr << "USER HANDLER - already registered" << std::endl;
-		return (false);		
+		return (false);
 	}
 	if (token.size() != 5 || token[1].empty() || token[4].empty()
 		|| correctname(token[1]) == false) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
 		std::cerr << "USER HANDLER - Invalid arguments" << std::endl;
+		return (false);
+	}
+	if (!client.getCorrectPassword()) {
+		std::cout << "INFO: Client provided wrong password, disconnecting..." << std::endl;
+		server.sendToClient(client.getFd(), ERR_PASSWDMISMATCH(client.getNickname()));
+		server.removeClient(client.getFd());
 		return (false);
 	}
 	client.setUsername(token[1]);

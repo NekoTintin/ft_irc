@@ -13,37 +13,50 @@
 #include "Channel.hpp"
 
 bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &client) {
-	
 	std::cout << "HANDLE PRIVATE MESSAGE" << std::endl;
-	if (!client.getRegistration())
-	{
+	// Check if the client is registered
+	if (!client.getRegistration()) {
 		server.sendToClient(client.getFd(), ERR_NOTREGISTERED(client.getNickname()));
 		std::cerr << "PRIVMSG HANDLER - Client is not registered" << std::endl;
 		return (false);
 	}
-	if (Token.size() == 1)
-	{
+	// Check if the command has the correct number of parameters
+	if (Token.size() == 1) {
 		server.sendToClient(client.getFd(), ERR_NORECIPIENT());
 		std::cerr << "PRIVMSG HANDLER - No recipient" << std::endl;
 		return (false);
 	}
-	if (Token.size() == 2 || Token[2].empty())
-	{
+	// Empty message check
+	if (Token.size() == 2 || Token[2].empty()) {
 		server.sendToClient(client.getFd(), ERR_NOTEXTTOSEND());
 		std::cerr << "PRIVMSG HANDLER - No text to send" << std::endl;
 		return (false);
 	}
 	
-	Client *target = server.findClient(Token[1]);
+	if (Token[1][0] == '#' || Token[1][0] == '&') {
+		Channel *target = server.findChannel(Token[1]);
+		if (!target) {
+			server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(client.getNickname(), Token[1]));
+			std::cerr << "PRIVMSG HANDLER - No channel with this name" << std::endl;
+			return (false);
+		}
+		std::string msg = RPL_TEXTTOSEND(client.getNickname(), client.getUsername(), Token[1], Token[2]);
+		target->broadcast(msg, &client, &server);
+		std::cout << "INFO: Message sent to channel : " << Token[1] << std::endl;
+		return (true);
+	} else {
+		// If the target is a user
+		Client *target = server.findClient(Token[1]);
 
-	if (target == NULL)
-	{
-		server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), Token[1]));
-		std::cerr << "PRIVMSG HANDLER - No client with this nickname" << std::endl;
-		return (false);
+		if (!target) {
+			server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), Token[1]));
+			std::cerr << "PRIVMSG HANDLER - No client with this nickname" << std::endl;
+			return (false);
+		}
+		server.sendToClient(target->getFd(), RPL_TEXTTOSEND(client.getNickname(), 
+			client.getUsername(), Token[1], Token[2]));
+		std::cout << "INFO: Message sent to user : " << Token[1] << std::endl;
+		return (true);
 	}
-	server.sendToClient(target->getFd(), RPL_TEXTTOSEND(client.getNickname(), 
-		client.getUsername(), Token[1], Token[2]));
-	std::cout << "INFO: Message sent to user : " << Token[1] << std::endl;
-	return (true);
+	return (false);
 }

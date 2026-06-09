@@ -139,8 +139,9 @@ void	Server::acceptNewClient() {
 }
 
 bool	Server::tryRegistration(Client &client) {
-	if (!client.getCorrectPassword() && client.getNicknamestatus() && client.getUsernamestatus()
-			&& client.getRealnamestatus() && !client.getRegistration()) {
+	if (client.getCorrectPassword() == false && client.getNicknamestatus() == true && client.getUsernamestatus() == true
+			&& client.getRealnamestatus() == true && client.getRegistration() == false) {
+		std::cout << "INFO: Client provided wrong password, disconnecting..." << std::endl;
 		sendToClient(client.getFd(), ERR_PASSWDMISMATCH(client.getNickname()));
 		removeClient(client.getFd());
 		return (false);
@@ -153,7 +154,6 @@ bool	Server::tryRegistration(Client &client) {
 			std::cout << "INFO: Client registered" << std::endl;
 			return (true);
 		}
-	
 	return (false);
 }
 
@@ -205,7 +205,7 @@ bool	Server::sendToClient(int fd, const std::string &msg) {
 
 	// Add \r and \n if not present
 	std::string formatted_msg = msg;
-	if (msg.size() < 2 || msg.substr(msg.size() - 2) != "\r\n")
+	if (msg.size() < 2 || msg.compare(msg.size() - 2, 2, "\r\n") != 0)
 		formatted_msg += "\r\n";
 
 	// Send to client
