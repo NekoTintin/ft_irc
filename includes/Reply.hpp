@@ -32,6 +32,7 @@
 #define ERR_NOSUCHCHANNEL(nick, channel) (std::string(":localhost 403 ") + nick + " " + channel + " :No such channel")
 #define ERR_NOTONCHANNEL(nick, channel) (std::string(":localhost 442 ") + nick + " " + channel + " :You're not on that channel")
 #define ERR_USERONCHANNEL(nick, target, channel) (std::string(":localhost 443 ") + nick + " " + target + " " + channel + " :is already on channel")
+#define ERR_USERNOTINCHANNEL(nick, target, channel) (std::string(":localhost 441 ") + nick + " " + target + " " + channel + " :They aren't on that channel")
 #define ERR_CHANNELISFULL(nick, channel) (std::string(":localhost 471 ") + nick + " " + channel + " :Cannot join channel (+l)")
 #define ERR_INVITEONLYCHAN(nick, channel) (std::string(":localhost 473 ") + nick + " " + channel + " :Cannot join channel (+i)")
 #define ERR_BADCHANNELKEY(nick, channel) (std::string(":localhost 475 ") + nick + " " + channel + " :Cannot join channel (+k)")
@@ -44,5 +45,6 @@
 #define ERR_NOTEXTTOSEND() (std::string(":localhost 412 ") + ":No text to send")
 #define RPL_TEXTTOSEND(sender_nick, user, nick, messagetext) (std::string(":" + sender_nick + "!" + user + "@localhost ") + "PRIVMSG " + nick + " :" + messagetext)
 #define ERR_NOORIGIN() (std::string(":localhost 409 ") + ":No origin specified")
+#define RPL_KICK(sender_nick, sender_user, channel, target, reason) (std::string(":" + sender_nick + "!" + sender_user + "@localhost ") + "KICK " + channel + " " + target + " :" + reason)
 
 #endif

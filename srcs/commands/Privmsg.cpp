@@ -53,8 +53,7 @@ bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &clie
 			std::cerr << "PRIVMSG HANDLER - No client with this nickname" << std::endl;
 			return (false);
 		}
-		server.sendToClient(target->getFd(), RPL_TEXTTOSEND(client.getNickname(), 
-			client.getUsername(), Token[1], Token[2]));
+		server.sendToClient(target->getFd(), RPL_TEXTTOSEND(client.getNickname(), client.getUsername(), Token[1], Token[2]));
 		std::cout << "INFO: Message sent to user : " << Token[1] << std::endl;
 		return (true);
 	}
