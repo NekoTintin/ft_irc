@@ -14,7 +14,7 @@
 #define RPL_TOPIC(nick, channel, topic) (std::string(":localhost 332 ") + nick + " " + channel + " :" + topic)
 #define RPL_INVITING(nick, channel, target) (std::string(":localhost 341 ") + nick + " " + target + " " + channel)
 #define RPL_NAMREPLY(nick, symbol, channel, usersList) (std::string(":localhost 353 ") + nick + " " + symbol + " " + channel + " :" + usersList)
-#define RPL_ENDOFNAMES(nick, channel) (std::string(":localhost 366 ") + nick + " " + channel + " :End of /NAMES list")
+#define RPL_ENDOFNAMES(nick, channel) (std::string(":localhost 366 ") + nick + " " + channel + " :End of NAMES list")
 
 // 3. General Errors + Auth
 #define ERR_NOSUCHNICK(nick, target) (std::string(":localhost 401 ") + nick + " " + target + " :No such nick/channel")

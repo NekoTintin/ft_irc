@@ -130,3 +130,16 @@ void	Channel::broadcast(const std::string &msg, const Client *sender, Server *se
 		}
 	}
 }
+
+std::string	Channel::getUsersList() const {
+	std::string	list;
+	std::map<int, const Client*>::const_iterator it;
+
+	for (it = this->_users.begin(); it != this->_users.end(); ++it) {
+		if (this->isUserOperator(it->second))
+			list += "@" + it->second->getNickname() + " ";
+		else
+			list += it->second->getNickname() + " ";
+	}
+	return (list);
+}

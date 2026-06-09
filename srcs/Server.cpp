@@ -327,7 +327,7 @@ Channel		*Server::findChannel(const std::string &name) {
 }
 
 bool			Server::createChannel(const std::string &name) {
-	if (!findChannel(name))
+	if (findChannel(name))
 		return (false);
 	Channel newChannel(name);
 	this->_channels[name] = newChannel;
