@@ -94,13 +94,13 @@ void	Server::addServertoPoll() {
 }
 
 void	Server::removeClient(int fd) {
-	if (fd != _socketFD)
-	{
+	if (fd != _socketFD) {
+		std::map<int, Client>::iterator it = _clients.find(fd);
+		if (it == _clients.end())
+			return;
 		close(fd);
-		for (std::vector<pollfd>::iterator it = _pollfds.begin(); it != _pollfds.end(); ++it)
-		{
-			if (it->fd == fd)
-			{
+		for (std::vector<pollfd>::iterator it = _pollfds.begin(); it != _pollfds.end(); ++it) {
+			if (it->fd == fd) {
 				_pollfds.erase(it);
 				break;
 			}
@@ -157,7 +157,7 @@ bool	Server::tryRegistration(Client &client) {
 	return (false);
 }
 
-void	Server::receiveFromClient(int fd) {
+bool	Server::receiveFromClient(int fd) {
 	char	buffer[1024];
 	int		bytesRecv = recv(fd, buffer, sizeof(buffer) - 1, 0);
 
@@ -165,13 +165,13 @@ void	Server::receiveFromClient(int fd) {
 	if (bytesRecv < 0) {
 		std::cerr << "Error: Failed to receive message from client fd " << fd << "." << std::endl;
 		removeClient(fd);
-		return;
+		return (false);
 	}
 	// Check for disconnection (recv returns 0)
 	else if (bytesRecv == 0) {
 		std::cout << "INFO: Connection closed" << std::endl;
 		removeClient(fd);
-		return;
+		return (false);
 	}
 
 	buffer[bytesRecv] = '\0';
@@ -186,7 +186,7 @@ void	Server::receiveFromClient(int fd) {
 		Command	_newCommand;
 		_newCommand.processLine(complete_command, *this, _clients[fd]);
 		if (!ClientExists(fd))
-			return;
+			return (false);
 		if (tryRegistration(_clients[fd]) == true) {
 			sendToClient(fd, RPL_WELCOME(_clients[fd].getNickname(), _clients[fd].getUsername(), "localhost"));
 			sendToClient(fd, RPL_YOURHOST(_clients[fd].getNickname()));
@@ -194,6 +194,7 @@ void	Server::receiveFromClient(int fd) {
 			sendToClient(fd, RPL_MYINFO(_clients[fd].getNickname()));
 		}
 	}
+	return (true);
 }
 
 bool	Server::sendToClient(int fd, const std::string &msg) {
@@ -219,7 +220,6 @@ bool	Server::sendToClient(int fd, const std::string &msg) {
 
 void	Server::signalHandler(int sig) {
 	(void) sig;
-
 	g_running = false;
 }
 
@@ -236,16 +236,13 @@ void	Server::runServerLoop() {
 
 	while (g_running)
 	{
-		
 		int ready = poll(_pollfds.data(), _pollfds.size(), -1);
-
 		if (ready < 0) {
 			if (!g_running)
 				break;
 			std::cerr << "Error: Poll Error" << std::endl;
 			break;
 		}
-
 		if (ready == 0) {
 			std::cerr << "Error: Time out" << std::endl;
 			break;
@@ -254,22 +251,23 @@ void	Server::runServerLoop() {
 		for (size_t i = 0; i < _pollfds.size(); i++) {
 			int fd = _pollfds[i].fd;
 
-			if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL)) {
-				if (fd != _socketFD) {
+			if (fd == _socketFD) {
+				if (_pollfds[i].revents & POLLIN)
+					acceptNewClient();
+				continue;
+			}
+
+			if (_pollfds[i].revents & POLLIN) {
+				if (!receiveFromClient(fd)) {
 					removeClient(fd);
-					if (i > 0)
-						i--;
+					i--;
+					continue;
 				}
-				continue;
 			}
 
-			if (fd == _socketFD && (_pollfds[i].revents & POLLIN)) {
-				acceptNewClient();
-				continue;
-			}
-
-			if (fd != _socketFD && (_pollfds[i].revents & POLLIN)) {
-				receiveFromClient(fd);
+			if (_pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL)) {
+				removeClient(fd);
+				i--;
 				continue;
 			}
 		}
@@ -284,8 +282,7 @@ std::string	Server::getPassword() {
 bool Server::NicknameExists(std::string nickname) {
 	std::map<int, Client>::iterator it = _clients.begin();
 
-	while (it != _clients.end())
-	{
+	while (it != _clients.end()) {
 		if (nickname == it->second.getNickname())
 			return (true);
 		it++;

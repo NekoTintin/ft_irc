@@ -67,6 +67,10 @@ bool handlePart(std::vector<std::string> &Token, Server &server, Client &client)
 			channel->broadcast(partMsg, NULL, &server);
 			channel->removeUser(&client);
 			std::cout << "INFO - USER " << client.getNickname() << " Left channel: " << *it << std::endl;
+			if (channel->getUsersList().empty()) {
+				server.removeChannel(*it);
+				std::cout << "INFO - Channel " << *it << " removed (empty)" << std::endl;
+			}
 		} else {
 			server.sendToClient(client.getFd(), ERR_NOTONCHANNEL(client.getNickname(), *it));
 			std::cerr << "PART HANDLER - Client is not on channel: " << *it << std::endl;

@@ -37,7 +37,7 @@ class Server {
 
 		void		removeClient(int fd);
 		void		acceptNewClient();
-		void		receiveFromClient(int fd);
+		bool		receiveFromClient(int fd);
 		void		cleanServer();
 
 		std::string	getPassword();
