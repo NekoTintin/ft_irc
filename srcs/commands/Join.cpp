@@ -10,6 +10,8 @@
 #include "Channel.hpp"
 
 bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
+	for (size_t i = 0; i < Token.size(); i++)
+		std::cout << "Token[" << i << "]: " << Token[i] << std::endl;
 	(void)Token;
 	(void)_hasTrailing;
 	std::cout << "HANDLE JOIN" << std::endl;
