@@ -25,6 +25,7 @@ bool tryToJoinChannel(Server &server, Client &client, const std::string &channel
 			std::cerr << "INFO - USER " << client.getNickname() << " Failed to create channel: " << channelName << std::endl;
 			return (false);
 		}
+
 		// Join the newly created channel
 		channel = server.findChannel(channelName);
 		if (!channel->addUser(&server, &client, password)) {
@@ -44,6 +45,7 @@ bool tryToJoinChannel(Server &server, Client &client, const std::string &channel
 
 bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
 	std::cout << "HANDLE JOIN" << std::endl;
+
 	(void)_hasTrailing;
 	// Check Token size
 	if (Token.size() < 2) {
@@ -51,6 +53,7 @@ bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client,
 		std::cerr << "JOIN HANDLER - Not enough parameters" << std::endl;
 		return (false);
 	}
+
 	// Check Registration
 	if (!client.getRegistration()) {
 		server.sendToClient(client.getFd(), ERR_NOTREGISTERED(client.getNickname()));
@@ -94,6 +97,5 @@ bool handleJoin(std::vector<std::string> &Token, Server &server, Client &client,
 		}
 		tryToJoinChannel(server, client, channelName, password);
 	}
-
 	return (true);
 }
