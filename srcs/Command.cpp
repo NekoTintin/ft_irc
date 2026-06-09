@@ -127,9 +127,13 @@ std::vector<std::string> Command::Tokenize(std::string line, bool *_hasTrailing)
 }
 
 int Command::processLine(std::string line, Server &server, Client &client) {
-	if (line.empty() && line[line.length() - 1] != '\n')
+	if (line.empty())
 		return (ERROR);
-	if (line.empty() && line[line.length() - 1] != '\r')
+
+	if (line[line.length() - 1] == '\r')
+		line.erase(line.length() - 1);
+
+	if (line.empty())
 		return (ERROR);
 
 	_command.clear();

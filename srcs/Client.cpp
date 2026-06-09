@@ -34,7 +34,7 @@ bool Client::isComplete() {
 	if (this->_buffer.empty())
 		return (false);
 	
-	std::size_t found = _buffer.find("\r\n");
+	std::size_t found = _buffer.find("\n");
 	if (found != std::string::npos)
 		return (true);
 
@@ -44,14 +44,15 @@ bool Client::isComplete() {
 }
 
 std::string Client::getCommand() {
-	std::size_t found = _buffer.find("\r\n");
+	std::size_t found = _buffer.find("\n");
 	std::string complete_command = _buffer.substr(0, found);
 	return (complete_command);
 }
 
 void Client::removeCommand() {
-	std::size_t found = _buffer.find("\r\n");
-	_buffer.erase(0, found + 2);
+	std::size_t found = _buffer.find("\n");
+	if (found != std::string::npos)
+		this->_buffer.erase(0, found + 1);
 }
 
 // Password
