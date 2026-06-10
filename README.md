@@ -18,7 +18,7 @@ make
 ```
 Start Irssi :
 ```bash
-irssi -c localhost -p 6667 -w <password> -n <nickname>
+irssi -c localhost -p <port> -w <password> -n <nickname>
 ```
 
 Need to be careful about open FDs and make sure that they are all properly closed
