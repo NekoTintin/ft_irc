@@ -46,5 +46,6 @@
 #define RPL_TEXTTOSEND(sender_nick, user, nick, messagetext) (std::string(":" + sender_nick + "!" + user + "@localhost ") + "PRIVMSG " + nick + " :" + messagetext)
 #define ERR_NOORIGIN() (std::string(":localhost 409 ") + ":No origin specified")
 #define RPL_KICK(sender_nick, sender_user, channel, target, reason) (std::string(":" + sender_nick + "!" + sender_user + "@localhost ") + "KICK " + channel + " " + target + " :" + reason)
+#define RPL_QUIT(sender_nick, sender_user, reason) (std::string(":" + sender_nick + "!" + sender_user + "@localhost ") + "QUIT :" + reason)
 
 #endif

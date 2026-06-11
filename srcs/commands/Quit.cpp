@@ -37,12 +37,35 @@
 
 bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client) {
 	std::cout << "HANDLE QUIT" << std::endl;
-	std::string Errormessage = "ERROR :Quit ";
-	if (Token.size() >= 2 && !Token[1].empty())
-		Errormessage += Token[1];
-	else
-		Errormessage += "Client Quit";
-	server.sendToClient(client.getFd(), Errormessage);
+	
+	std::string reason = "Quit: Leaving";
+	if (Token.size() > 1)
+		reason = "Quit: " + buildTrailingMsg(Token[1]);
+
+	std::vector<std::string> channelList = server.getChannelList();
+	std::vector<std::string>::iterator it;
+	std::vector<Channel*> joinedChannels;
+
+	// Get all channels where client is here
+	for (it = channelList.begin(); it != channelList.end(); ++it) {
+		Channel *channel = server.findChannel(*it);
+		if (channel->isUserOnChannel(&client))
+			joinedChannels.push_back(channel);
+	}
+
+	// Broadcast message + remove user from channels
+	std::vector<Channel*>::iterator channelIt;
+	for (channelIt = joinedChannels.begin(); channelIt != joinedChannels.end(); ++channelIt) {
+		(*channelIt)->broadcast(RPL_QUIT(client.getNickname(), client.getUsername(), reason), &client, &server);
+		(*channelIt)->removeUser(&client);
+		std::cout << "INFO: Client " << client.getNickname() << " removed from channel " << (*channelIt)->getName() << std::endl;
+
+		// Check if channel is empty
+		if ((*channelIt)->getUsersList().empty()) {
+			server.removeChannel((*channelIt)->getName());
+			std::cout << "INFO: Channel " << (*channelIt)->getName() << " removed (empty)" << std::endl;
+		}
+	}
 	server.removeClient(client.getFd());
 	return (true);
 }

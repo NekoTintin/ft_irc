@@ -328,6 +328,7 @@ bool			Server::createChannel(const std::string &name) {
 		return (false);
 	Channel newChannel(name);
 	this->_channels[name] = newChannel;
+	std::cout << "INFO: Channel created: " << name << std::endl;
 	return (true);
 }
 
@@ -336,5 +337,15 @@ bool			Server::removeChannel(const std::string &name) {
 	if (!toDelete)
 		return (false);
 	this->_channels.erase(name);
+	std::cout << "INFO: Channel removed: " << name << std::endl;
 	return (true);
+}
+
+std::vector<std::string>	Server::getChannelList() const {
+	std::vector<std::string> channelNames;
+	std::map<std::string, Channel>::const_iterator it = _channels.begin();
+
+	for (it = _channels.begin(); it != _channels.end(); ++it)
+		channelNames.push_back(it->second.getName());
+	return (channelNames);
 }

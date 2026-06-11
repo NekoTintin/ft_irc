@@ -5,13 +5,12 @@
 
 bool handlePass(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
 	std::cout << "HANDLE PASS" << std::endl;
-	if (client.getRegistration() == true)
-	{
+	if (client.getRegistration() == true) {
 		server.sendToClient(client.getFd(), ERR_ALREADYREGISTRED(client.getNickname()));
 		return (false);
 	}
-	if (Token.size() != 2 || _hasTrailing == true)
-	{
+
+	if (Token.size() != 2 || _hasTrailing == true) {
 		std::string username;
 		if (client.getNickname().empty())
 			username = "*";
@@ -20,6 +19,7 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client,
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(username, "PASS"));
 		return (false);
 	}
+
 	if (Token[1] != server.getPassword())
 		return (false);
 	client.setCorrectPassword();

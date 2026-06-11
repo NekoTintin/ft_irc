@@ -12,17 +12,6 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-std::string trailingMessage(const std::vector<std::string> &Token) {
-	std::string message;
-	for (size_t i = 2; i < Token.size(); ++i) {
-		message += Token[i];
-		if (i != Token.size() - 1) {
-			message += " ";
-		}
-	}
-	return message;
-}
-
 bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &client) {
 	std::cout << "HANDLE PRIVATE MESSAGE" << std::endl;
 	// Check if the client is registered
@@ -51,7 +40,7 @@ bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &clie
 			std::cerr << "PRIVMSG HANDLER - No channel with this name" << std::endl;
 			return (false);
 		}
-		std::string msg = RPL_TEXTTOSEND(client.getNickname(), client.getUsername(), Token[1], trailingMessage(Token));
+		std::string msg = RPL_TEXTTOSEND(client.getNickname(), client.getUsername(), Token[1], buildTrailingMsg(Token[2]));
 		target->broadcast(msg, &client, &server);
 		std::cout << "INFO: Message sent to channel : " << Token[1] << std::endl;
 		return (true);
@@ -64,7 +53,7 @@ bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &clie
 			std::cerr << "PRIVMSG HANDLER - No client with this nickname" << std::endl;
 			return (false);
 		}
-		server.sendToClient(target->getFd(), RPL_TEXTTOSEND(client.getNickname(), client.getUsername(), Token[1], trailingMessage(Token)));
+		server.sendToClient(target->getFd(), RPL_TEXTTOSEND(client.getNickname(), client.getUsername(), Token[1], buildTrailingMsg(Token[2])));
 		std::cout << "INFO: Message sent to user : " << Token[1] << std::endl;
 		return (true);
 	}

@@ -5,15 +5,6 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-std::string trailingMsg(std::string &message) {
-	std::string result;
-	size_t pos = message.find(':');
-	if (pos != std::string::npos) {
-		result = message.substr(pos + 1);
-	}
-	return result;
-}
-
 bool handlePart(std::vector<std::string> &Token, Server &server, Client &client) {
 	std::cout << "HANDLE PART" << std::endl;
 

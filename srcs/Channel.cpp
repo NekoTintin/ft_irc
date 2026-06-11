@@ -106,6 +106,13 @@ bool	Channel::addUser(Server *server, const Client *client, const std::string &k
 	return (true);
 }
 
+bool	Channel::addOperator(const Client *client) {
+	if (!this->isUserOnChannel(client))
+		return (false);
+	this->_operators.insert(std::make_pair(client->getFd(), client));
+	return (true);
+}
+
 bool	Channel::removeUser(const Client *client) {
 	// Check if user in on channel
 	if (!this->isUserOnChannel(client))

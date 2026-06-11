@@ -45,3 +45,11 @@ std::string getDate() {
 	
 	return std::string(buf);
 }
+
+std::string buildTrailingMsg(std::string &message) {
+	std::string result;
+	size_t pos = message.find(':');
+	if (pos != std::string::npos)
+		result = message.substr(pos + 1);
+	return result;
+}

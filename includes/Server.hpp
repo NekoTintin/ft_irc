@@ -50,24 +50,25 @@ class Server {
 		bool	 	ClientExists(int fd);
 
 		// Channels func
-		Channel*	findChannel(const std::string &name);
-		bool		createChannel(const std::string &name);
-		bool		removeChannel(const std::string &name);
+		Channel*					findChannel(const std::string &name);
+		bool						createChannel(const std::string &name);
+		bool						removeChannel(const std::string &name);
+		std::vector<std::string>	getChannelList() const;
 
 		// Signal
 		static void	signalHandler(int sig);
 
 	private:
-		int						_port;
-		std::string 			_password;
-		int						_socketFD;
-		struct sockaddr_in		_serverAddr;
+		int							_port;
+		std::string 				_password;
+		int							_socketFD;
+		struct sockaddr_in			_serverAddr;
 
 		// List of file descriptors to monitor with poll
-		std::vector<pollfd>		_pollfds;
+		std::vector<pollfd>			_pollfds;
 
 		// List of clients, mapped by their file descriptor
-		std::map<int, Client>	_clients;
+		std::map<int, Client>		_clients;
 
 		// List of channels
 		std::map<std::string, Channel> _channels;
