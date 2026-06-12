@@ -50,7 +50,6 @@ void	applyMode(std::vector<std::string> &Token, Client &client, Channel &channel
 }
 
 bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
-	(void)Token;
 	(void) _hasTrailing;
 	std::cout << "HANDLE MODE" << std::endl;
 
@@ -60,6 +59,28 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		std::cerr << "MODE HANDLER - Client is not registered" << std::endl;
 		return (false);
 	}
-	
+	//  All are arguments ok ?
+	if (Token.size() < 3) {
+		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
+		std::cerr << "MODE HANDLER - Missing argument" << std::endl;
+		return (false);
+	}
+	// Channel exists ?
+	Channel *channel = server.findChannel(Token[1]);
+	if (!channel) {
+    	server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(client.getNickname(), Token[1]));
+    	return (false);
+	}
+	// Is Client in the Channel ?
+	if (!channel->isUserOnChannel(&client)) {
+		server.sendToClient(client.getFd(), ERR_USERNOTINCHANNEL(client.getNickname(), client.getNickname(), channel->getName()));
+		return (false);
+	}
+	// Is Client an Operator ?
+	if (!channel->isUserOperator(&client)) {
+		server.sendToClient(client.getFd(), ERR_CHANOPRIVSNEEDED(client.getNickname(), channel->getName()));
+		return (false);
+	}
+	applyMode(Token, client, *channel);
 	return (true);
 }
