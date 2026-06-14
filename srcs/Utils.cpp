@@ -13,6 +13,8 @@ bool nonalphanumchar(char c) {
 
 bool correctnamenickname(std::string nametocheck) {
 
+	if (nametocheck.empty())
+		return (false);
 	if (!isalpha(nametocheck[0]))
 		return (false);
 	size_t i = 0;
@@ -50,6 +52,6 @@ std::string buildTrailingMsg(std::string &message) {
 	std::string result;
 	size_t pos = message.find(':');
 	if (pos != std::string::npos)
-		result = message.substr(pos + 1);
-	return result;
+		return message.substr(pos + 1);
+	return message;
 }

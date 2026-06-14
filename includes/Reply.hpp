@@ -22,6 +22,7 @@
 #define ERR_NEEDMOREPARAMS(nick, command) (std::string(":localhost 461 ") + nick + " " + command + " :Not enough parameters")
 #define ERR_ALREADYREGISTRED(nick) (std::string(":localhost 462 ") + nick + " :Unauthorized command (already registered)")
 #define ERR_PASSWDMISMATCH(nick) (std::string(":localhost 464 ") + nick + " :Password incorrect")
+#define ERR_UNKNOWNCOMMAND(command) (std::string(":localhost 421 ") + command + " :Unknown command")
 
 // 4. Nickname Errors
 #define ERR_NONICKNAMEGIVEN(nick) (std::string(":localhost 431 ") + nick + " :No nickname given")

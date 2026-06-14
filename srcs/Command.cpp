@@ -99,6 +99,8 @@ std::vector<std::string> Command::Tokenize(std::string line, bool *_hasTrailing)
 	{
 		while (i < line.size() && line[i] == ' ')
 			i++;
+		if (i >= line.size())
+			break;
 		begin_word = i;
 		if (line[i] == ':')
 		{
@@ -145,7 +147,10 @@ int Command::processLine(std::string line, Server &server, Client &client) {
 	if (token.empty())
 		return (ERROR);
 	if (!isCommand(token[0]))
+	{
+		server.sendToClient(client.getFd(), ERR_UNKNOWNCOMMAND(token[0]));
 		return (ERROR);
+	}
 	_command = token[0];
 	for (size_t i = 1; i < token.size(); i++)
 		_args.push_back(token[i]);

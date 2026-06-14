@@ -21,7 +21,7 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 	}
 
 	// Verify arguments
-	if (Token.size() < 3) {
+	if (Token.size() != 3) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "INVITE"));
 		std::cerr << "INVITE HANDLER - Not enough parameters" << std::endl;
 		return (false);
