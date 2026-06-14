@@ -54,6 +54,7 @@ class Server {
 		bool						createChannel(const std::string &name);
 		bool						removeChannel(const std::string &name);
 		std::vector<std::string>	getChannelList() const;
+		void						removeClientFromAllChannels(Client &client);
 
 		// Signal
 		static void	signalHandler(int sig);

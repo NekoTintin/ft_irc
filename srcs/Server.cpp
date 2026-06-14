@@ -164,12 +164,14 @@ bool	Server::receiveFromClient(int fd) {
 	// Check for errors and disconnections
 	if (bytesRecv < 0) {
 		std::cerr << "Error: Failed to receive message from client fd " << fd << "." << std::endl;
+		removeClientFromAllChannels(_clients[fd]);
 		removeClient(fd);
 		return (false);
 	}
 	// Check for disconnection (recv returns 0)
 	else if (bytesRecv == 0) {
 		std::cout << "INFO: Connection closed" << std::endl;
+		removeClientFromAllChannels(_clients[fd]);
 		removeClient(fd);
 		return (false);
 	}
@@ -231,6 +233,34 @@ void	Server::cleanServer() {
 	_clients.clear();
 }
 
+
+void	Server::removeClientFromAllChannels(Client &client)
+{
+	std::vector<std::string> channelsToRemove;
+
+    for (std::map<std::string, Channel>::iterator it = _channels.begin();
+         it != _channels.end();
+         ++it)
+    {
+        Channel &channel = it->second;
+
+        if (channel.isUserOnChannel(&client))
+        {
+            std::string msg = ":" + client.getNickname() + "!" +
+                client.getUsername() + "@localhost QUIT :Client disconnected";
+
+            channel.broadcast(msg, &client, this);
+
+            channel.removeUser(&client);
+
+            if (channel.getUsersList().empty())
+                channelsToRemove.push_back(channel.getName());
+        }
+    }
+
+    for (size_t i = 0; i < channelsToRemove.size(); ++i)
+        removeChannel(channelsToRemove[i]);
+}
 void	Server::runServerLoop() {
 	signal(SIGINT, signalHandler);
 
@@ -266,6 +296,7 @@ void	Server::runServerLoop() {
 			}
 
 			if (_pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL)) {
+				removeClientFromAllChannels(_clients[fd]);
 				removeClient(fd);
 				i--;
 				continue;
