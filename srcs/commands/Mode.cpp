@@ -94,7 +94,7 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 	}
 	// Is Client in the Channel ?
 	if (!channel->isUserOnChannel(&client)) {
-		server.sendToClient(client.getFd(), ERR_USERNOTINCHANNEL(client.getNickname(), client.getNickname(), channel->getName()));
+		server.sendToClient(client.getFd(), ERR_NOTONCHANNEL(client.getNickname(), channel->getName()));
 		std::cerr << "MODE HANDLER - Client is not on channel" << std::endl;
 		return (false);
 	}
@@ -119,7 +119,7 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 	// Error if combined mode ?
 	if (Token[2].size() > 2 || (mode != 'i' && mode != 't' && mode != 'k' && mode != 'o'
 		&& mode != 'l')) {
-		server.sendToClient(client.getFd(), ERR_UNKNOWNMODE(Token[1]));
+		server.sendToClient(client.getFd(), ERR_UNKNOWNMODE(Token[2]));
 		std::cerr << "MODE HANDLER - Combined mode not supported" << std::endl;
 		return (false);
 	}
@@ -181,5 +181,11 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		return (false);
 	}
 	applyMode(Token, client, *channel, server);
+	//broadcast
+	std::string msg = ":" + client.getNickname() + "!" + client.getUsername() +
+		"@localhost MODE " + channel->getName() + " " + Token[2];
+	if (Token.size() > 3)
+		msg += " " + Token[3];
+	channel->broadcast(msg, NULL, &server);
 	return (true);
 }
