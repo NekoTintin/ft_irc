@@ -22,7 +22,7 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 
 	// Verify arguments
 	if (Token.size() < 3) {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS("INVITE"));
+		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "INVITE"));
 		std::cerr << "INVITE HANDLER - Not enough parameters" << std::endl;
 		return (false);
 	}
@@ -30,21 +30,21 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 	// Is channel valid ?
 	Channel *channel = server.findChannel(Token[2]);
 	if (!channel) {
-		server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(Token[2]));
+		server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(client.getNickname(), Token[2]));
 		std::cerr << "INVITE HANDLER - Channel does not exist" << std::endl;
 		return (false);
 	}
 
 	// Is client on channel ?
 	if (!channel->isUserOnChannel(&client)) {
-		server.sendToClient(client.getFd(), ERR_NOTONCHANNEL(Token[2]));
+		server.sendToClient(client.getFd(), ERR_NOTONCHANNEL(client.getNickname(), Token[2]));
 		std::cerr << "INVITE HANDLER - Client is not on channel" << std::endl;
 		return (false);
 	}
 
 	// Is client an operator on channel ?
 	if (!channel->isUserOperator(&client)) {
-		server.sendToClient(client.getFd(), ERR_CHANOPRIVSNEEDED(Token[2]));
+		server.sendToClient(client.getFd(), ERR_CHANOPRIVSNEEDED(client.getNickname(),Token[2]));
 		std::cerr << "INVITE HANDLER - Client is not an operator on channel" << std::endl;
 		return (false);
 	}
@@ -52,7 +52,7 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 	// Is target client valid ?
 	Client *targetClient = server.findClient(Token[1]);
 	if (!targetClient) {
-		server.sendToClient(client.getFd(), ERR_NOSUCHNICK(Token[1]));
+		server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), Token[1]));
 		std::cerr << "INVITE HANDLER - Target client does not exist" << std::endl;
 		return (false);
 	}

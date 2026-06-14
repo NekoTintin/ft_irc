@@ -86,16 +86,15 @@ bool	Channel::addUser(Server *server, const Client *client, const std::string &k
 		server->sendToClient(client->getFd(), ERR_USERONCHANNEL(client->getNickname(), client->getNickname(), this->_name));
 		return (false);
 	}
-	
-	if (!invited) {
-		// Check if channel is full
-		// 0 is infinite users
-		if (this->_userLimit > 0) {
-			if ((this->_users.size() >= this->_userLimit)) {
-				server->sendToClient(client->getFd(), ERR_CHANNELISFULL(client->getNickname(), this->_name));
-				return (false);
-			}
+	// Check if channel is full
+	// 0 is infinite users
+	if (this->_userLimit > 0) {
+		if ((this->_users.size() >= this->_userLimit)) {
+			server->sendToClient(client->getFd(), ERR_CHANNELISFULL(client->getNickname(), this->_name));
+			return (false);
 		}
+	}
+	if (!invited) {
 		// Check if channel is invite-only
 		if (this->_isInviteOnly) {
 			server->sendToClient(client->getFd(), ERR_INVITEONLYCHAN(client->getNickname(), this->_name));

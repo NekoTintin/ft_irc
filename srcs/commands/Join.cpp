@@ -13,11 +13,14 @@ bool tryToJoinChannel(Server &server, Client &client, const std::string &channel
 	// Find if Channel exists
 	Channel *channel = server.findChannel(channelName);
 	if (channel) {
+		bool invited = channel->isUserInvited(client.getNickname());
 		// Try to join channel
-		if (!channel->addUser(&server, &client, password)) {
+		if (!channel->addUser(&server, &client, password, invited)) {
 			std::cerr << "INFO - USER " << client.getNickname() << " Failed to join channel: " << channelName << std::endl;
 			return (false);
 		}
+		if (invited)
+			channel->removeFromInvitedList(client.getNickname());
 	}
 	else {
 		// Create channel if doesn't exist
@@ -28,7 +31,7 @@ bool tryToJoinChannel(Server &server, Client &client, const std::string &channel
 
 		// Join the newly created channel
 		channel = server.findChannel(channelName);
-		if (!channel->addUser(&server, &client, password)) {
+		if (!channel->addUser(&server, &client, password, false)) {
 			std::cerr << "INFO - USER " << client.getNickname() << " Failed to join newly created channel: " << channelName << std::endl;
 			return (false);
 		}
