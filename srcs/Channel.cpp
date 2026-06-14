@@ -70,25 +70,37 @@ bool	Channel::isUserOperator(const Client *client) const {
 	return (this->_operators.find(client->getFd()) != this->_operators.end());
 }
 
+bool	Channel::isUserInvited(const std::string &nickname) const {
+	std::vector<std::string>::const_iterator it;
+	for (it = this->_invitedUsers.begin(); it != this->_invitedUsers.end(); ++it) {
+		if (*it == nickname)
+			return (true);
+	}
+	return (false);
+}
+
 // Funcs
-bool	Channel::addUser(Server *server, const Client *client, const std::string &key) {
+bool	Channel::addUser(Server *server, const Client *client, const std::string &key, bool invited) {
 	// Check if user is already on the channel
 	if (this->isUserOnChannel(client)) {
 		server->sendToClient(client->getFd(), ERR_USERONCHANNEL(client->getNickname(), client->getNickname(), this->_name));
 		return (false);
 	}
-	// Check if channel is full
-	// 0 is infinite users
-	if (this->_userLimit > 0) {
-		if ((this->_users.size() >= this->_userLimit)) {
-			server->sendToClient(client->getFd(), ERR_CHANNELISFULL(client->getNickname(), this->_name));
+	
+	if (!invited) {
+		// Check if channel is full
+		// 0 is infinite users
+		if (this->_userLimit > 0) {
+			if ((this->_users.size() >= this->_userLimit)) {
+				server->sendToClient(client->getFd(), ERR_CHANNELISFULL(client->getNickname(), this->_name));
+				return (false);
+			}
+		}
+		// Check if channel is invite-only
+		if (this->_isInviteOnly) {
+			server->sendToClient(client->getFd(), ERR_INVITEONLYCHAN(client->getNickname(), this->_name));
 			return (false);
 		}
-	}
-	// Check if channel is invite-only
-	if (this->_isInviteOnly) {
-		server->sendToClient(client->getFd(), ERR_INVITEONLYCHAN(client->getNickname(), this->_name));
-		return (false);
 	}
 	// Check if channel is key-protected
 	if (!this->_channelKey.empty()) {
@@ -156,4 +168,22 @@ std::string	Channel::getUsersList() const {
 			list += it->second->getNickname() + " ";
 	}
 	return (list);
+}
+
+bool	Channel::addToInvitedList(const std::string &nickname) {
+	if (this->isUserInvited(nickname))
+		return (false);
+	this->_invitedUsers.push_back(nickname);
+	return (true);
+}
+
+bool	Channel::removeFromInvitedList(const std::string &nickname) {
+	std::vector<std::string>::iterator it;
+	for (it = this->_invitedUsers.begin(); it != this->_invitedUsers.end(); ++it) {
+		if (*it == nickname) {
+			this->_invitedUsers.erase(it);
+			return (true);
+		}
+	}
+	return (false);
 }

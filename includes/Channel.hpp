@@ -33,14 +33,17 @@ class Channel {
 		bool							isProtectedTopic() const;
 		bool							isUserOnChannel(const Client *client) const;
 		bool							isUserOperator(const Client *client) const;
+		bool							isUserInvited(const std::string &nickname) const;
 
 		// Func
-		bool							addUser(Server *server, const Client *client, const std::string &key);
+		bool							addUser(Server *server, const Client *client, const std::string &key, bool invited = false);
 		bool							addOperator(const Client *client);
 		bool							removeOperator(const Client *client);
 		bool							removeUser(const Client *client);
 		void							broadcast(const std::string &msg, const Client *client, Server *server);
 		std::string						getUsersList() const;
+		bool							addToInvitedList(const std::string &nickname);
+		bool							removeFromInvitedList(const std::string &nickname);
 
 	private:
 		// Basics
@@ -49,6 +52,7 @@ class Channel {
 		// Users
 		std::map<int, const Client*>	_users;
 		std::map<int, const Client*>	_operators;
+		std::vector<std::string>		_invitedUsers;
 		// Modes
 		bool							_isInviteOnly;
 		bool							_isProtectedTopic;

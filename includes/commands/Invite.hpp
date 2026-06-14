@@ -7,6 +7,7 @@
 
 class Server;
 class Client;
+class Channel;
 
 bool	handleInvite(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing);
 
