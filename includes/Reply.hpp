@@ -48,4 +48,7 @@
 #define RPL_KICK(sender_nick, sender_user, channel, target, reason) (std::string(":" + sender_nick + "!" + sender_user + "@localhost ") + "KICK " + channel + " " + target + " :" + reason)
 #define RPL_QUIT(sender_nick, sender_user, reason) (std::string(":" + sender_nick + "!" + sender_user + "@localhost ") + "QUIT :" + reason)
 
+// 8. Mode Errors
+#define ERR_UNKNOWNMODE(channel) (std::string(":localhost 472 ") + channel + ":Unknown mode")
+
 #endif
