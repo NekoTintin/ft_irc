@@ -159,22 +159,22 @@ bool	Server::tryRegistration(Client &client) {
 
 bool	Server::receiveFromClient(int fd) {
 	char	buffer[1024];
-	int		Recv = recv(fd, buffer, sizeof(buffer) - 1, 0);
+	int		bytesRecv = recv(fd, buffer, sizeof(buffer) - 1, 0);
 
 	// Check for errors and disconnections
-	if (Recv < 0) {
+	if (bytesRecv < 0) {
 		std::cerr << "Error: Failed to receive message from client fd " << fd << "." << std::endl;
 		removeClient(fd);
 		return (false);
 	}
 	// Check for disconnection (recv returns 0)
-	else if (Recv == 0) {
+	else if (bytesRecv == 0) {
 		std::cout << "INFO: Connection closed" << std::endl;
 		removeClient(fd);
 		return (false);
 	}
 
-	buffer[Recv] = '\0';
+	buffer[bytesRecv] = '\0';
 
 	std::string data(buffer);
 	_clients[fd].addToBuffer(data);
@@ -210,8 +210,8 @@ bool	Server::sendToClient(int fd, const std::string &msg) {
 		formatted_msg += "\r\n";
 
 	// Send to client
-	ssize_t Size = send(fd, formatted_msg.c_str(), formatted_msg.size(), MSG_NOSIGNAL);
-	if (Size < 0) {
+	ssize_t bytesSize = send(fd, formatted_msg.c_str(), formatted_msg.size(), MSG_NOSIGNAL);
+	if (bytesSize < 0) {
 		std::cerr << "Error: Failed to send message to client fd " << fd << "." << std::endl;
 		return (false);
 	}

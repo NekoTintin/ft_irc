@@ -66,6 +66,10 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 
 	// Add to invited list
 	channel->addToInvitedList(targetClient->getNickname());
-
+	server.sendToClient(client.getFd(), 
+		RPL_INVITING(client.getNickname(), channel->getName(), targetClient->getNickname()));
+	std::string msg = ":" + client.getNickname() + "!" + client.getUsername() +
+    "@localhost INVITE " + targetClient->getNickname() + " :" + channel->getName();
+	server.sendToClient(targetClient->getFd(), msg);
 	return (true);
 }
