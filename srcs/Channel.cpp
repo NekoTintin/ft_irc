@@ -113,6 +113,13 @@ bool	Channel::addOperator(const Client *client) {
 	return (true);
 }
 
+bool	Channel::removeOperator(const Client *client) {
+    if (!this->isUserOperator(client))
+        return (false);
+    this->_operators.erase(client->getFd());
+    return (true);
+}
+
 bool	Channel::removeUser(const Client *client) {
 	// Check if user in on channel
 	if (!this->isUserOnChannel(client))

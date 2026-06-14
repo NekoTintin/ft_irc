@@ -17,8 +17,10 @@ l : set/remove limite utilisateurs
 #include "Channel.hpp"
 
 // Just apply mode, perms are already checked in handleMode
-void	applyMode(std::vector<std::string> &Token, Client &client, Channel &channel) {
-	char mode = Token[2][0];
+void	applyMode(std::vector<std::string> &Token, Client &client, Channel &channel, Server &server) {
+
+	char sign = Token[2][0];
+	char mode = Token[2][1];
 	std::string arg = "";
 	if (Token.size() > 3)
 		arg = Token[3];
@@ -26,23 +28,51 @@ void	applyMode(std::vector<std::string> &Token, Client &client, Channel &channel
 	switch (mode) {
 		case 'i':
 			std::cout << "HANDLE MODE: " << client.getNickname() << " is setting invite only mode on channel " << channel.getName() << std::endl;
-			channel.setInviteOnly(true);
+			if (sign == '+')
+				channel.setInviteOnly(true);
+			else
+				channel.setInviteOnly(false);
 			break;
 		case 't':
 			std::cout << "HANDLE MODE: " << client.getNickname() << " is setting topic protection mode on channel " << channel.getName() << std::endl;
-			channel.setProtectedTopic(true);
+			if (sign == '+')
+				channel.setProtectedTopic(true);
+			else
+				channel.setProtectedTopic(false);
 			break;
 		case 'k':
 			std::cout << "HANDLE MODE: " << client.getNickname() << " is setting password mode on channel " << channel.getName() << std::endl;
-			channel.setChannelKey(arg);
+			if (sign == '+')
+				channel.setChannelKey(arg);
+			else
+				channel.setChannelKey("");
 			break;
 		case 'o':
-			std::cout << "HANDLE MODE: " << client.getNickname() << " made operator for " << channel.getName() << std::endl;
-			channel.addOperator(&client);
+		{
+			if (!arg.empty()) {
+				Client *target = server.findClient(arg);
+				if (target == NULL)
+				{
+					server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), arg));
+					break;
+				}
+				std::cout << "HANDLE MODE: " << client.getNickname() << " made operator for " << channel.getName() << std::endl;
+				if (sign == '+')
+					channel.addOperator(target);
+				else
+					channel.removeOperator(target);
+			}
 			break;
+		}
 		case 'l':
-			std::cout << "HANDLE MODE: " << client.getNickname() << " is setting user limit to " << arg << " on channel " << channel.getName() << std::endl;
-			channel.setUserLimit(std::atoi(arg.c_str()));
+			if (!arg.empty() && atoi(arg) > 0)
+			{
+				std::cout << "HANDLE MODE: " << client.getNickname() << " is setting user limit to " << arg << " on channel " << channel.getName() << std::endl;
+				if (sign == '+')
+					channel.setUserLimit(std::atoi(arg.c_str()));
+				else
+					channel.setUserLimit(0);
+			}
 			break;
 		default:
 			std::cerr << "Unknown mode: " << mode << " (will be ignored)" << std::endl;
@@ -60,7 +90,7 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		return (false);
 	}
 	//  All are arguments ok ?
-	if (Token.size() < 3) {
+	if (Token.size() < 3 || Token[2].empty() || Token[2].size() < 2 ) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Missing argument" << std::endl;
 		return (false);
@@ -81,6 +111,16 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		server.sendToClient(client.getFd(), ERR_CHANOPRIVSNEEDED(client.getNickname(), channel->getName()));
 		return (false);
 	}
-	applyMode(Token, client, *channel);
+	// Is there a sign before the mode
+	if (Token[2][0] != '+' && Token[2][0] != '-') {
+		std::cerr << "MODE HANDLER - Missing sign for mode" << std::endl;
+		return (false);
+	}
+	// Error if combined mode ?
+	if (Token[2].size() > 2) {
+		std::cerr << "MODE HANDLER - Combined mode not supported" << std::endl;
+		return (false);
+	}
+	applyMode(Token, client, *channel, server);
 	return (true);
 }

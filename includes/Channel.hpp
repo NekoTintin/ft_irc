@@ -37,6 +37,7 @@ class Channel {
 		// Func
 		bool							addUser(Server *server, const Client *client, const std::string &key);
 		bool							addOperator(const Client *client);
+		bool							removeOperator(const Client *client);
 		bool							removeUser(const Client *client);
 		void							broadcast(const std::string &msg, const Client *client, Server *server);
 		std::string						getUsersList() const;
