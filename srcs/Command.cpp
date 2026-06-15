@@ -146,8 +146,7 @@ int Command::processLine(std::string line, Server &server, Client &client) {
 	std::vector<std::string>	token = Tokenize(line, &_hasTrailing);
 	if (token.empty())
 		return (ERROR);
-	if (!isCommand(token[0]))
-	{
+	if (!isCommand(token[0])) {
 		server.sendToClient(client.getFd(), ERR_UNKNOWNCOMMAND(token[0]));
 		return (ERROR);
 	}

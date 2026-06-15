@@ -238,34 +238,31 @@ void	Server::removeClientFromAllChannels(Client &client)
 {
 	std::vector<std::string> channelsToRemove;
 
-    for (std::map<std::string, Channel>::iterator it = _channels.begin();
-         it != _channels.end();
-         ++it)
-    {
-        Channel &channel = it->second;
+	for (std::map<std::string, Channel>::iterator it = _channels.begin();
+		it != _channels.end();++it) {
+		Channel &channel = it->second;
 
-        if (channel.isUserOnChannel(&client))
-        {
-            std::string msg = ":" + client.getNickname() + "!" +
-                client.getUsername() + "@localhost QUIT :Client disconnected";
+		if (channel.isUserOnChannel(&client))
+		{
+			std::string msg = ":" + client.getNickname() + "!" +
+				client.getUsername() + "@localhost QUIT :Client disconnected";
 
-            channel.broadcast(msg, &client, this);
+			channel.broadcast(msg, &client, this);
 
-            channel.removeUser(&client);
+			channel.removeUser(&client);
 
-            if (channel.getUsersList().empty())
-                channelsToRemove.push_back(channel.getName());
-        }
-    }
+			if (channel.getUsersList().empty())
+				channelsToRemove.push_back(channel.getName());
+		}
+	}
 
-    for (size_t i = 0; i < channelsToRemove.size(); ++i)
-        removeChannel(channelsToRemove[i]);
+	for (size_t i = 0; i < channelsToRemove.size(); ++i)
+		removeChannel(channelsToRemove[i]);
 }
 void	Server::runServerLoop() {
 	signal(SIGINT, signalHandler);
 
-	while (g_running)
-	{
+	while (g_running) {
 		int ready = poll(_pollfds.data(), _pollfds.size(), -1);
 		if (ready < 0) {
 			if (!g_running)

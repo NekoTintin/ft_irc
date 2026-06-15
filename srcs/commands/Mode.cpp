@@ -34,8 +34,7 @@ void	applyMode(std::vector<std::string> &Token, Client &client, Channel &channel
 			else
 				channel.setChannelKey("");
 			break;
-		case 'o':
-		{
+		case 'o': {
 			Client *target = server.findClient(arg);
 			std::cout << "HANDLE MODE: " << client.getNickname() << " made operator for " << channel.getName() << std::endl;
 			if (sign == '+')
@@ -110,17 +109,14 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		std::cerr << "MODE HANDLER - Combined mode not supported" << std::endl;
 		return (false);
 	}
-	if (mode == 'o')
-	{
-		if (Token.size() != 4)
-		{
+	if (mode == 'o') {
+		if (Token.size() != 4) {
 			server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
     		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
 			return (false);
 		}
 		Client *target = server.findClient(arg);
-		if (target == NULL)
-		{
+		if (target == NULL) {
 			server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), arg));
 			std::cerr << "MODE HANDLER - Target not found" << std::endl;
 			return (false);
@@ -131,38 +127,32 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 			return (false);
 		}
 	}
-	if (mode == 'l' && sign == '+' && Token.size() != 4)
-	{
+	if (mode == 'l' && sign == '+' && Token.size() != 4) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
 		return (false);
 	}
-	else if (mode == 'l' && sign == '+' && atoi(Token[3].c_str()) <= 0)
-	{
+	else if (mode == 'l' && sign == '+' && atoi(Token[3].c_str()) <= 0) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Incorrect limit" << std::endl;
 		return (false);
 	}
-	if (mode == 'l' && sign == '-' && Token.size() != 3)
-	{
+	if (mode == 'l' && sign == '-' && Token.size() != 3) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
 		return (false);	
 	}
-	if ((mode == 'i' || mode == 't') && Token.size() != 3)
-    {
+	if ((mode == 'i' || mode == 't') && Token.size() != 3) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
 		return (false);
 	}
-	if ((mode == 'k') && sign == '+' && Token.size() != 4)
-   	{
+	if ((mode == 'k') && sign == '+' && Token.size() != 4) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
 		return (false);
 	}
-	if ((mode == 'k') && sign == '-' && Token.size() != 3)
-	{
+	if ((mode == 'k') && sign == '-' && Token.size() != 3) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
 		return (false);
