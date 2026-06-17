@@ -4,12 +4,13 @@
 # define AUTOOP_ON_LEAVE 0
 
 # include "Reply.hpp"
-# include "Server.hpp"
 # include "Client.hpp"
 # include <iostream>
 # include <string>
 # include <map>
 # include <vector>
+
+class Server;
 
 class Channel {
 	public:

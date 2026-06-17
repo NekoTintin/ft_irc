@@ -17,11 +17,12 @@
 # include <iterator>
 # include "Client.hpp"
 # include "Command.hpp"
-# include "Channel.hpp"
 # include "Utils.hpp"
 # include "Reply.hpp"
 
 extern bool g_running;
+
+class Channel;
 
 class Server {
 	public:
