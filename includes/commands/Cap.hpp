@@ -1,7 +1,7 @@
 #ifndef CAP_HPP
 # define CAP_HPP
 
-# include <iostream>
+# include <string>
 # include <vector>
 # include "../Reply.hpp"
 

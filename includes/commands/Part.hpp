@@ -1,9 +1,9 @@
 #ifndef PART_HPP
 # define PART_HPP
 
-# include <iostream>
+# include <string>
 # include <vector>
-# include "Reply.hpp"
+# include "../Reply.hpp"
 
 class Server;
 class Client;

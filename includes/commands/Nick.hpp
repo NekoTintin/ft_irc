@@ -1,7 +1,7 @@
 #ifndef NICK_HPP
 # define NICK_HPP
 
-# include <iostream>
+# include <string>
 # include <vector>
 # include <cctype>
 # include <string>

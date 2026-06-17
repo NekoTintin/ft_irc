@@ -1,9 +1,9 @@
 #ifndef TOPIC_HPP
 # define TOPIC_HPP
 
-# include <iostream>
+#include <string>
 # include <vector>
-# include "Reply.hpp"
+#include "../Reply.hpp"
 
 class Server;
 class Client;

@@ -1,9 +1,9 @@
 #ifndef PASS_HPP
 # define PASS_HPP
 
-# include <iostream>
+# include <string>
 # include <vector>
-# include "Reply.hpp"
+# include "../Reply.hpp"
 
 class Server;
 class Client;

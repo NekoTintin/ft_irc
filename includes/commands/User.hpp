@@ -1,10 +1,9 @@
 #ifndef USER_HPP
 # define USER_HPP
 
-#include <iostream>
 #include <vector>
 #include <string>
-#include "Utils.hpp"
+#include "../Reply.hpp"
 
 class Server;
 class Client;
