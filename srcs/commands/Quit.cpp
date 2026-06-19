@@ -35,12 +35,26 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+std::string buildReason(std::vector<std::string> &Token) {
+	std::string result = "";
+
+	for (size_t i = 1; i < Token.size(); i++) {
+		result += Token[i];
+		if (i != Token.size() - 1)
+			result += " ";
+	}
+
+	if (!result.empty() && result[0] == ':')
+		result = result.substr(1);
+	return (result);
+}
+
 bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client) {
 	std::cout << "HANDLE QUIT" << std::endl;
 	
-	std::string reason = "Quit: Leaving";
+	std::string reason = "Leaving";
 	if (Token.size() > 1)
-		reason = "Quit: " + buildTrailingMsg(Token[1]);
+		reason = buildReason(Token);
 
 	std::vector<std::string> channelList = server.getChannelList();
 	std::vector<std::string>::iterator it;
