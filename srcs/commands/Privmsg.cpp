@@ -40,6 +40,14 @@ bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &clie
 			std::cerr << "PRIVMSG HANDLER - No channel with this name" << std::endl;
 			return (false);
 		}
+
+		// Check if the client is on the channel
+		if (!target->isUserOnChannel(&client)) {
+			server.sendToClient(client.getFd(), ERR_CANNOTSENDTOCHAN(client.getNickname(), Token[1]));
+			std::cerr << "PRIVMSG HANDLER - Client is not on the channel" << std::endl;
+			return (false);
+		}
+
 		std::string msg = RPL_TEXTTOSEND(client.getNickname(), client.getUsername(), Token[1], buildTrailingMsg(Token[2]));
 		target->broadcast(msg, &client, &server);
 		std::cout << "INFO: Message sent to channel : " << Token[1] << std::endl;

@@ -46,6 +46,30 @@ NICK <nickname>
 USER <username> 0 * :<realname>
 ```
 
+How to use the commands:
+```bash
+NICK <nickname>
+USER <username> 0 * :<realname>
+JOIN <channel>
+PART <channel>
+KICK <channel> <user> :<reason>
+INVITE <user> <channel>
+PRIVMSG <target> :<message>
+MODE <channel> <mode> [<parameter>]
+TOPIC <channel> :<topic>
+```
+
+Same commands on Irssi:
+```bash
+/nick <nickname>
+/join <channel>
+/msg <target> <message>
+/kick <channel> <user> <reason>
+/invite <user> <channel>
+/mode <channel> <mode> [<parameter>]
+/topic <channel> <topic>
+```
+
 ## Ressources
 
 - Poll():
