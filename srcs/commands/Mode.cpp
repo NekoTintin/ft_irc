@@ -65,6 +65,19 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		std::cerr << "MODE HANDLER - Client is not registered" << std::endl;
 		return (false);
 	}
+
+	// Send channel Operators
+	if (Token.size() == 2) {
+		Channel *channel = server.findChannel(Token[1]);
+		if (!channel) {
+			server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(client.getNickname(), Token[1]));
+			std::cerr << "MODE HANDLER - Channel does not exist" << std::endl;
+			return (false);
+		}
+		server.sendToClient(client.getFd(), RPL_CHANNELMODEIS(client.getNickname(), channel->getName(), channel->getModesList()));
+		return (true);
+	}
+
 	//  All are arguments ok ?
 	if (Token.size() < 3 || Token[2].empty() || Token[2].size() < 2 ) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));

@@ -42,6 +42,7 @@ class Channel {
 		bool							removeUser(const Client *client);
 		void							broadcast(const std::string &msg, const Client *client, Server *server);
 		std::string						getUsersList() const;
+		std::string						getModesList() const;
 		bool							addToInvitedList(const std::string &nickname);
 		bool							removeFromInvitedList(const std::string &nickname);
 

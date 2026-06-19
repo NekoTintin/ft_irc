@@ -169,6 +169,28 @@ std::string	Channel::getUsersList() const {
 	return (list);
 }
 
+std::string	Channel::getModesList() const {
+	std::string	list;
+	list += "+";
+	if (this->_isInviteOnly)
+		list += "i";
+	if (this->_isProtectedTopic)
+		list += "t";
+	if (!this->_channelKey.empty())
+		list += "k";
+	if (this->_userLimit > 0)
+		list += "l";
+
+	if (!this->_channelKey.empty())
+		list += " " + this->_channelKey;
+	if (this->_userLimit > 0) {
+		std::ostringstream oss;
+		oss << this->_userLimit;
+		list += " " + oss.str();
+	}
+	return (list);
+}
+
 bool	Channel::addToInvitedList(const std::string &nickname) {
 	if (this->isUserInvited(nickname))
 		return (false);

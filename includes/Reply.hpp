@@ -29,7 +29,7 @@
 #define ERR_ERRONEUSNICKNAME(nick, bad_nick) (std::string(":localhost 432 ") + nick + " " + bad_nick + " :Erroneous nickname")
 #define ERR_NICKNAMEINUSE(nick, bad_nick) (std::string(":localhost 433 ") + nick + " " + bad_nick + " :Nickname is already in use")
 
-// 5. Channel Errors
+// 5. Channel
 #define ERR_NOSUCHCHANNEL(nick, channel) (std::string(":localhost 403 ") + nick + " " + channel + " :No such channel")
 #define ERR_NOTONCHANNEL(nick, channel) (std::string(":localhost 442 ") + nick + " " + channel + " :You're not on that channel")
 #define ERR_USERONCHANNEL(nick, target, channel) (std::string(":localhost 443 ") + nick + " " + target + " " + channel + " :is already on channel")
@@ -37,6 +37,7 @@
 #define ERR_CHANNELISFULL(nick, channel) (std::string(":localhost 471 ") + nick + " " + channel + " :Cannot join channel (+l)")
 #define ERR_INVITEONLYCHAN(nick, channel) (std::string(":localhost 473 ") + nick + " " + channel + " :Cannot join channel (+i)")
 #define ERR_BADCHANNELKEY(nick, channel) (std::string(":localhost 475 ") + nick + " " + channel + " :Cannot join channel (+k)")
+#define RPL_CHANNELMODEIS(nick, channel, modes) (std::string(":localhost 324 ") + nick + " " + channel + " " + modes)
 
 // 6. Permission Errors
 #define ERR_CHANOPRIVSNEEDED(nick, channel) (std::string(":localhost 482 ") + nick + " " + channel + " :You're not channel operator")
