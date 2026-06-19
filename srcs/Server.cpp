@@ -364,8 +364,8 @@ bool			Server::removeChannel(const std::string &name) {
 	Channel	*toDelete = findChannel(name);
 	if (!toDelete)
 		return (false);
-	this->_channels.erase(name);
 	std::cout << "INFO: Channel removed: " << name << std::endl;
+	this->_channels.erase(name);
 	return (true);
 }
 
