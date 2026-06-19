@@ -36,7 +36,7 @@ bool handlePrivmsg(std::vector<std::string> &Token, Server &server, Client &clie
 	}
 	// Check if the command has the correct number of parameters
 	if (Token.size() == 1) {
-		server.sendToClient(client.getFd(), ERR_NORECIPIENT());
+		server.sendToClient(client.getFd(), ERR_NORECIPIENT(client.getNickname()));
 		std::cerr << "PRIVMSG HANDLER - No recipient" << std::endl;
 		return (false);
 	}
