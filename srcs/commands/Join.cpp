@@ -40,7 +40,11 @@ bool tryToJoinChannel(Server &server, Client &client, const std::string &channel
 	// Standards JOIN messages
 	std::string joinMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost JOIN :" + channelName + "\r\n";
     channel->broadcast(joinMsg, NULL, &server);
-	server.sendToClient(client.getFd(), RPL_TOPIC(client.getNickname(), channelName, channel->getTopic()));
+	// Check empty Topic
+	if (channel->getTopic().empty())
+		server.sendToClient(client.getFd(), RPL_NOTOPIC(client.getNickname(), channelName));
+	else
+		server.sendToClient(client.getFd(), RPL_TOPIC(client.getNickname(), channelName, channel->getTopic()));
 	server.sendToClient(client.getFd(), RPL_NAMREPLY(client.getNickname(), "=", channelName, channel->getUsersList()));
 	server.sendToClient(client.getFd(), RPL_ENDOFNAMES(client.getNickname(), channelName));
 	return (true);

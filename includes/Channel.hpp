@@ -34,6 +34,7 @@ class Channel {
 		bool							isUserOnChannel(const Client *client) const;
 		bool							isUserOperator(const Client *client) const;
 		bool							isUserInvited(const std::string &nickname) const;
+		bool							isEmpty() const;
 
 		// Func
 		bool							addUser(Server *server, const Client *client, const std::string &key, bool invited = false);

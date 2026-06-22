@@ -75,7 +75,7 @@ bool handleQuit(std::vector<std::string> &Token, Server &server, Client &client)
 		std::cout << "INFO: Client " << client.getNickname() << " removed from channel " << (*channelIt)->getName() << std::endl;
 
 		// Check if channel is empty
-		if ((*channelIt)->getUsersList().empty()) {
+		if ((*channelIt)->isEmpty()) {
 			std::cout << "INFO: Channel " << (*channelIt)->getName() << " removed (empty)" << std::endl;
 			server.removeChannel((*channelIt)->getName());
 		}

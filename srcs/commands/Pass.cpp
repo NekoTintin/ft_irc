@@ -20,8 +20,10 @@ bool handlePass(std::vector<std::string> &Token, Server &server, Client &client,
 		return (false);
 	}
 
-	if (Token[1] != server.getPassword())
+	if (Token[1] != server.getPassword()) {
+		server.sendToClient(client.getFd(), ERR_PASSWDMISMATCH(client.getNickname()));
 		return (false);
+	}
 	client.setCorrectPassword();
 	std::cout << "INFO: Correct Password for client " << client.getFd() << std::endl;
 	return (true);

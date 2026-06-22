@@ -21,9 +21,17 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 	}
 
 	// Verify arguments
-	if (Token.size() != 3) {
+	if (Token.size() < 3) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "INVITE"));
 		std::cerr << "INVITE HANDLER - Not enough parameters" << std::endl;
+		return (false);
+	}
+
+	// Is target client valid ?
+	Client *targetClient = server.findClient(Token[1]);
+	if (!targetClient) {
+		server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), Token[1]));
+		std::cerr << "INVITE HANDLER - Target client does not exist" << std::endl;
 		return (false);
 	}
 
@@ -43,23 +51,15 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 	}
 
 	// Is client an operator on channel ?
-	if (!channel->isUserOperator(&client)) {
+	if (channel->isInviteOnly() && !channel->isUserOperator(&client)) {
 		server.sendToClient(client.getFd(), ERR_CHANOPRIVSNEEDED(client.getNickname(),Token[2]));
 		std::cerr << "INVITE HANDLER - Client is not an operator on channel" << std::endl;
 		return (false);
 	}
 
-	// Is target client valid ?
-	Client *targetClient = server.findClient(Token[1]);
-	if (!targetClient) {
-		server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), Token[1]));
-		std::cerr << "INVITE HANDLER - Target client does not exist" << std::endl;
-		return (false);
-	}
-
 	// Check if target client is already on the channel
 	if (channel->isUserOnChannel(targetClient)) {
-		server.sendToClient(client.getFd(), ERR_USERONCHANNEL(targetClient->getNickname(), targetClient->getNickname(), channel->getName()));
+		server.sendToClient(client.getFd(), ERR_USERONCHANNEL(client.getNickname(), targetClient->getNickname(), channel->getName()));
 		std::cerr << "INVITE HANDLER - Target client is already on channel" << std::endl;
 		return (false);
 	}
@@ -67,7 +67,7 @@ bool handleInvite(std::vector<std::string> &Token, Server &server, Client &clien
 	// Add to invited list
 	channel->addToInvitedList(targetClient->getNickname());
 	server.sendToClient(client.getFd(), 
-		RPL_INVITING(client.getNickname(), channel->getName(), targetClient->getNickname()));
+		RPL_INVITING(client.getNickname(), targetClient->getNickname(), channel->getName()));
 	std::string msg = INVITE_MSG(client.getNickname(), client.getUsername(), targetClient->getNickname(), channel->getName());
 	server.sendToClient(targetClient->getFd(), msg);
 	return (true);

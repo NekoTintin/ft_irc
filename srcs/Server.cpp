@@ -377,3 +377,13 @@ std::vector<std::string>	Server::getChannelList() const {
 		channelNames.push_back(it->second.getName());
 	return (channelNames);
 }
+
+bool	Server::globalBroadcast(const std::string &msg, const Client *sender) {
+	std::map<int, Client>::iterator it;
+	for (it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+		if (sender == NULL || it->first != sender->getFd()) {
+			sendToClient(it->first, msg);
+		}
+	}
+	return (true);
+}

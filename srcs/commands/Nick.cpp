@@ -26,7 +26,13 @@ bool handleNick(std::vector<std::string> &token, Server &server, Client &client,
 		server.sendToClient(client.getFd(), ERR_NICKNAMEINUSE(client.getNickname(), token[1]));
 		return (false);
 	}
+	std::string oldNick = client.getNickname();
 	client.setNickname(token[1]);
+	if (client.getNicknamestatus()) {
+		// Broadcast
+		std::string nickMsg = ":" + oldNick + "!" + client.getUsername() + "@localhost NICK :" + token[1] + "\r\n";
+		server.globalBroadcast(nickMsg, NULL);
+	}
 	std::cout << "INFO: Nickname set for FD" << client.getFd() << ": " << client.getNickname() << std::endl;
 	return (true);
 }

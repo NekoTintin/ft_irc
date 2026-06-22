@@ -79,6 +79,10 @@ bool	Channel::isUserInvited(const std::string &nickname) const {
 	return (false);
 }
 
+bool	Channel::isEmpty() const {
+	return (this->_users.empty());
+}
+
 // Funcs
 bool	Channel::addUser(Server *server, const Client *client, const std::string &key, bool invited) {
 	// Check if user is already on the channel
@@ -157,10 +161,12 @@ void	Channel::broadcast(const std::string &msg, const Client *sender, Server *se
 }
 
 std::string	Channel::getUsersList() const {
-	std::string	list;
+	std::string	list = "";
 	std::map<int, const Client*>::const_iterator it;
 
 	for (it = this->_users.begin(); it != this->_users.end(); ++it) {
+		if (it != this->_users.begin())
+			list += " ";
 		if (this->isUserOperator(it->second))
 			list += "@" + it->second->getNickname() + " ";
 		else

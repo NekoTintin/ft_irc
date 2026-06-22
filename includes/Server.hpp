@@ -56,6 +56,8 @@ class Server {
 		std::vector<std::string>	getChannelList() const;
 		void						removeClientFromAllChannels(Client &client);
 
+		bool						globalBroadcast(const std::string &msg, const Client *sender = NULL);
+
 		// Signal
 		static void	signalHandler(int sig);
 
