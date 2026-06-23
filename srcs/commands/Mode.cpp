@@ -22,8 +22,15 @@ void	applyMode(Client &client, Channel &channel, Server &server, char sign, char
 			break;
 		case 'k':
 			std::cout << "HANDLE MODE: " << client.getNickname() << " is setting password mode on channel " << channel.getName() << std::endl;
-			if (sign == '+')
-				channel.setChannelKey(arg);
+			if (sign == '+') {
+				if (channel.hasChannelKey()) {
+					server.sendToClient(client.getFd(), ERR_KEYSET(client.getNickname(), channel.getName()));
+					std::cerr << "MODE HANDLER - Channel key already set" << std::endl;
+				}
+				else {
+					channel.setChannelKey(arg);
+				}
+			}
 			else
 				channel.setChannelKey("");
 			break;
@@ -110,7 +117,7 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 
 		// If mode supported
 		if (c != 'i' && c != 't' && c != 'k' && c != 'o' && c != 'l') {
-			server.sendToClient(client.getFd(), ERR_UNKNOWNMODE(client.getNickname(), std::string(1, c)));
+			server.sendToClient(client.getFd(), ERR_UNKNOWNMODE(client.getNickname(), std::string(1, c), channel->getName()));
 			std::cerr << "MODE HANDLER - Unknown mode flag: " << c << std::endl;
 			continue;
 		}
@@ -176,7 +183,9 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		}
 	}
 	// Send broadcast to channel
-	std::string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost MODE " + channel->getName() + " " + changedModes + changedArgs;
-	channel->broadcast(msg, NULL, &server);
+	if (!changedModes.empty()) {
+		std::string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost MODE " + channel->getName() + " " + changedModes + changedArgs;
+		channel->broadcast(msg, NULL, &server);
+	}
 	return (true);
 }

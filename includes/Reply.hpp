@@ -38,6 +38,7 @@
 # define ERR_INVITEONLYCHAN(nick, channel) (std::string(":localhost 473 ") + nick + " " + channel + " :Cannot join channel (+i)")
 # define ERR_BADCHANNELKEY(nick, channel) (std::string(":localhost 475 ") + nick + " " + channel + " :Cannot join channel (+k)")
 # define RPL_CHANNELMODEIS(nick, channel, modes) (std::string(":localhost 324 ") + nick + " " + channel + " " + modes)
+# define ERR_KEYSET(nick, channel) (std::string(":localhost 467 ") + nick + " " + channel + " :Channel key already set")
 
 // 6. Permission Errors
 # define ERR_CHANOPRIVSNEEDED(nick, channel) (std::string(":localhost 482 ") + nick + " " + channel + " :You're not channel operator")
@@ -53,6 +54,6 @@
 # define ERR_CANNOTSENDTOCHAN(nick, channel) (std::string(":localhost 404 ") + nick + " " + channel + " :Cannot send to channel")
 
 // 8. Mode Errors
-# define ERR_UNKNOWNMODE(client, mode) (std::string(":localhost 472 ") + client + " " + mode + " :Unknown mode")
+# define ERR_UNKNOWNMODE(client, mode, channel) (std::string(":localhost 472 ") + client + " " + mode + " :is unknown mode char to me for" + channel)
 
 #endif

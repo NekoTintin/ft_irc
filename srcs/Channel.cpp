@@ -79,6 +79,10 @@ bool	Channel::isUserInvited(const std::string &nickname) const {
 	return (false);
 }
 
+bool	Channel::hasChannelKey() const {
+	return (!this->_channelKey.empty());
+}
+
 bool	Channel::isEmpty() const {
 	return (this->_users.empty());
 }
