@@ -105,6 +105,7 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 	std::string modes = Token[2];
 	char sign = '+';
 	size_t idx = 3;
+	int		paramsCount = 0;
 
 	for (size_t i = 0; i < modes.size(); ++i) {
 		// Iterate on each char
@@ -133,6 +134,11 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 
 		std::string arg = "";
 		if (needsArg) {
+			if (paramsCount >= 3) {
+				std::cerr << "MODE HANDLER - Too many arguments for mode: " << sign << c << std::endl;
+				continue;
+			}
+			++paramsCount;
 			// Check if argument is provided (below Token.size and not empty)
 			if (idx >= Token.size() || Token[idx].empty()) {
 				server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
