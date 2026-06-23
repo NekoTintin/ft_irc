@@ -4,14 +4,7 @@
 #include "Channel.hpp"
 
 // Just apply mode, perms are already checked in handleMode
-void	applyMode(std::vector<std::string> &Token, Client &client, Channel &channel, Server &server) {
-
-	char sign = Token[2][0];
-	char mode = Token[2][1];
-	std::string arg = "";
-	if (Token.size() > 3)
-		arg = Token[3];
-
+void	applyMode(Client &client, Channel &channel, Server &server, char sign, char mode, const std::string &arg) {
 	switch (mode) {
 		case 'i':
 			std::cout << "HANDLE MODE: " << client.getNickname() << " is setting invite only mode on channel " << channel.getName() << std::endl;
@@ -56,7 +49,6 @@ void	applyMode(std::vector<std::string> &Token, Client &client, Channel &channel
 }
 
 bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client, bool _hasTrailing) {
-
 	(void) _hasTrailing;
 	std::cout << "HANDLE MODE" << std::endl;
 	// Is client registered ?
@@ -66,116 +58,121 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		return (false);
 	}
 
-	// Send channel Operators
-	if (Token.size() == 2) {
-		Channel *channel = server.findChannel(Token[1]);
-		if (!channel) {
-			server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(client.getNickname(), Token[1]));
-			std::cerr << "MODE HANDLER - Channel does not exist" << std::endl;
-			return (false);
-		}
-		server.sendToClient(client.getFd(), RPL_CHANNELMODEIS(client.getNickname(), channel->getName(), channel->getModesList()));
-		return (true);
-	}
-
-	//  All are arguments ok ?
-	if (Token.size() < 3 || Token[2].empty() || Token[2].size() < 2 ) {
+	if (Token.size() < 2 || Token[1].empty()) {
 		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
 		std::cerr << "MODE HANDLER - Missing argument" << std::endl;
 		return (false);
 	}
+
 	// Channel exists ?
 	Channel *channel = server.findChannel(Token[1]);
 	if (!channel) {
-    	server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(client.getNickname(), Token[1]));
-    	std::cerr << "MODE HANDLER - Channel does not exist" << std::endl;
-		return (false);
-	}
-	// Is Client in the Channel ?
-	if (!channel->isUserOnChannel(&client)) {
-		server.sendToClient(client.getFd(), ERR_NOTONCHANNEL(client.getNickname(), channel->getName()));
-		std::cerr << "MODE HANDLER - Client is not on channel" << std::endl;
-		return (false);
-	}
-	// Is Client an Operator ?
-	if (!channel->isUserOperator(&client)) {
-		server.sendToClient(client.getFd(), ERR_CHANOPRIVSNEEDED(client.getNickname(), channel->getName()));
-		std::cerr << "MODE HANDLER - Client in not an operator" << std::endl;
-		return (false);
-	}
-	// Is there a sign before the mode
-	if (Token[2][0] != '+' && Token[2][0] != '-') {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-		std::cerr << "MODE HANDLER - Missing sign for mode" << std::endl;
+		server.sendToClient(client.getFd(), ERR_NOSUCHCHANNEL(client.getNickname(), Token[1]));
+		std::cerr << "MODE HANDLER - Channel does not exist" << std::endl;
 		return (false);
 	}
 
-	char sign = Token[2][0];
-	char mode = Token[2][1];
-	std::string arg = "";
-	if (Token.size() > 3)
-		arg = Token[3];
-	// Error if combined mode ?
-	if (Token[2].size() > 2 || (mode != 'i' && mode != 't' && mode != 'k' && mode != 'o'
-		&& mode != 'l')) {
-		server.sendToClient(client.getFd(), ERR_UNKNOWNMODE(Token[2]));
-		std::cerr << "MODE HANDLER - Combined mode not supported" << std::endl;
+	// Send channel Operators
+	if (Token.size() == 2) {
+		server.sendToClient(client.getFd(), RPL_CHANNELMODEIS(client.getNickname(), channel->getName(), channel->getModesList()));
+		return (true);
+	}
+
+	if (Token[2].empty()) {
+		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
+		std::cerr << "MODE HANDLER - Missing argument" << std::endl;
 		return (false);
 	}
-	if (mode == 'o') {
-		if (Token.size() != 4) {
+
+	// Check if client is operator
+	if (!channel->isUserOperator(&client)) {
+		server.sendToClient(client.getFd(), ERR_CHANOPRIVSNEEDED(client.getNickname(), channel->getName()));
+		std::cerr << "MODE HANDLER - Client is not operator on channel" << std::endl;
+		return (false);
+	}
+
+	// Parser multimode
+	std::string changedModes = "";
+	std::string changedArgs = "";
+
+	std::string modes = Token[2];
+	char sign = '+';
+	size_t idx = 3;
+
+	for (size_t i = 0; i < modes.size(); ++i) {
+		// Iterate on each char
+		char c = modes[i];
+
+		if (c == '+' || c == '-') {
+			sign = c;
+			continue;
+		}
+
+		// If mode supported
+		if (c != 'i' && c != 't' && c != 'k' && c != 'o' && c != 'l') {
+			server.sendToClient(client.getFd(), ERR_UNKNOWNMODE(client.getNickname(), std::string(1, c)));
+			std::cerr << "MODE HANDLER - Unknown mode flag: " << c << std::endl;
+			continue;
+		}
+
+		// If mode requires argument
+		bool needsArg = false;
+		if (c == 'o')
+			needsArg = true;
+		else if (c == 'k' && sign == '+')
+			needsArg = true;
+		else if (c == 'l' && sign == '+')
+			needsArg = true;
+
+		std::string arg = "";
+		if (needsArg) {
+			// Check if argument is provided (below Token.size and not empty)
+			if (idx >= Token.size() || Token[idx].empty()) {
+				server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
+				std::cerr << "MODE HANDLER - Missing argument for mode: " << sign << c << std::endl;
+				continue;
+			}
+			arg = Token[idx];
+			++idx;
+		}
+
+		// Edges cases
+		if (c == 'o') {
+			Client *target = server.findClient(arg);
+			if (!target) {
+				server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), arg));
+				std::cerr << "MODE HANDLER - Target client does not exist: " << arg << std::endl;
+				continue;
+			}
+			if (!channel->isUserOnChannel(target)) {
+				server.sendToClient(client.getFd(), ERR_USERNOTINCHANNEL(client.getNickname(), target->getNickname(), channel->getName()));
+				std::cerr << "MODE HANDLER - Target client is not on channel: " << arg << std::endl;
+				continue;
+			}
+		}
+		if (c == 'l' && sign == '+' && std::atoi(arg.c_str()) <= 0) {
 			server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-    		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
-			return (false);
+			std::cerr << "MODE HANDLER - Invalid user limit: " << arg << std::endl;
+			continue;
 		}
-		Client *target = server.findClient(arg);
-		if (target == NULL) {
-			server.sendToClient(client.getFd(), ERR_NOSUCHNICK(client.getNickname(), arg));
-			std::cerr << "MODE HANDLER - Target not found" << std::endl;
-			return (false);
+
+		// Apply mode
+		applyMode(client, *channel, server, sign, c, arg);
+
+		// Create mode change string
+		if (changedModes.empty() || changedModes.at(changedModes.size() - 1) != sign) {
+			if (changedModes.empty() || (changedModes.size() == 1 && (changedModes[0] == '+' || changedModes[0] == '-')))
+				changedModes = sign;
+			else
+				changedModes += sign;
 		}
-		if (!channel->isUserOnChannel(target)) {
-			server.sendToClient(client.getFd(), ERR_USERNOTINCHANNEL(client.getNickname(), target->getNickname(), channel->getName()));
-			std::cerr << "MODE HANDLER - User not in channel" << std::endl;
-			return (false);
+		changedModes += c;
+		if (needsArg) {
+			changedArgs += " " + arg;
 		}
 	}
-	if (mode == 'l' && sign == '+' && Token.size() != 4) {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
-		return (false);
-	}
-	else if (mode == 'l' && sign == '+' && atoi(Token[3].c_str()) <= 0) {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-		std::cerr << "MODE HANDLER - Incorrect limit" << std::endl;
-		return (false);
-	}
-	if (mode == 'l' && sign == '-' && Token.size() != 3) {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
-		return (false);	
-	}
-	if ((mode == 'i' || mode == 't') && Token.size() != 3) {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
-		return (false);
-	}
-	if ((mode == 'k') && sign == '+' && Token.size() != 4) {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
-		return (false);
-	}
-	if ((mode == 'k') && sign == '-' && Token.size() != 3) {
-		server.sendToClient(client.getFd(), ERR_NEEDMOREPARAMS(client.getNickname(), "MODE"));
-		std::cerr << "MODE HANDLER - Wrong number of args" << std::endl;
-		return (false);
-	}
-	applyMode(Token, client, *channel, server);
-	//broadcast
-	std::string msg = ":" + client.getNickname() + "!" + client.getUsername() +
-		"@localhost MODE " + channel->getName() + " " + Token[2];
-	if (Token.size() > 3)
-		msg += " " + Token[3];
+	// Send broadcast to channel
+	std::string msg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost MODE " + channel->getName() + " " + changedModes + changedArgs;
 	channel->broadcast(msg, NULL, &server);
 	return (true);
 }

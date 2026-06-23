@@ -53,6 +53,6 @@
 # define ERR_CANNOTSENDTOCHAN(nick, channel) (std::string(":localhost 404 ") + nick + " " + channel + " :Cannot send to channel")
 
 // 8. Mode Errors
-# define ERR_UNKNOWNMODE(channel) (std::string(":localhost 472 ") + channel + ":Unknown mode")
+# define ERR_UNKNOWNMODE(client, mode) (std::string(":localhost 472 ") + client + " " + mode + " :Unknown mode")
 
 #endif
