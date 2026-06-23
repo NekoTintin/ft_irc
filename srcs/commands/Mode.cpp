@@ -160,11 +160,15 @@ bool	handleMode(std::vector<std::string> &Token, Server &server, Client &client,
 		applyMode(client, *channel, server, sign, c, arg);
 
 		// Create mode change string
-		if (changedModes.empty() || changedModes.at(changedModes.size() - 1) != sign) {
-			if (changedModes.empty() || (changedModes.size() == 1 && (changedModes[0] == '+' || changedModes[0] == '-')))
-				changedModes = sign;
-			else
-				changedModes += sign;
+		char lastSign = '\0';
+		for (size_t k = changedModes.size(); k > 0; --k) {
+			if (changedModes[k - 1] == '+' || changedModes[k - 1] == '-') {
+				lastSign = changedModes[k - 1];
+				break;
+			}
+		}
+		if (lastSign != sign) {
+			changedModes += sign;
 		}
 		changedModes += c;
 		if (needsArg) {
