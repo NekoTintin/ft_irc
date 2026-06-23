@@ -28,7 +28,7 @@ bool handleNick(std::vector<std::string> &token, Server &server, Client &client,
 	}
 	std::string oldNick = client.getNickname();
 	client.setNickname(token[1]);
-	if (client.getNicknamestatus()) {
+	if (client.getNicknamestatus() && client.getUsernamestatus() && client.getRealnamestatus()) {
 		// Broadcast
 		std::string nickMsg = ":" + oldNick + "!" + client.getUsername() + "@localhost NICK :" + token[1] + "\r\n";
 		server.globalBroadcast(nickMsg, NULL);
